@@ -219,3 +219,15 @@ Remove it before submission.
 - The Malay abstract is hyphenated with English rules. Check its line breaks.
 - Double spacing uses LaTeX's standard `\doublespacing` (setspace), which is
   slightly tighter than Word's "Double".
+
+## Licence
+
+`iucthesis.cls` is distributed under the
+[LaTeX Project Public License](https://www.latex-project.org/lppl/),
+version 1.3c or later (see `LICENSE`). If you distribute a modified version
+of the class, give it a different name.
+
+The sample files (`main.tex`, `metadata.tex`, `spine.tex`, `frontmatter/`,
+`chapters/`, `appendices/`, `references.bib`, `figures/`) may be used freely as
+the starting point for your own thesis, with no conditions. Your thesis
+content is yours.
