@@ -358,7 +358,14 @@
 % #1 ext, #2 heading
 \newcommand\iuc@makelist[2]{%
   \iuc@checklist{#1}%
-  \ifiuc@listnonempty\iuc@typesetlist{#1}{#2}\fi}
+  \ifiuc@listnonempty\iuc@typesetlist{#1}{#2}\else\iuc@openlist{#1}\fi}
+% When a list is omitted, still open its output file (as \@starttoc would)
+% so that entries added later are recorded and the list reappears.
+\newcommand\iuc@openlist[1]{%
+  \if@filesw
+    \expandafter\newwrite\csname tf@#1\endcsname
+    \immediate\openout\csname tf@#1\endcsname\jobname.#1\relax
+  \fi}
 \newcommand\iuc@typesetlist[2]{%
   \iucfrontchapter{#2}%
   {\setlength\parskip{0pt}\@starttoc{#1}}}
