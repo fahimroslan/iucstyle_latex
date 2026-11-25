@@ -1,0 +1,10 @@
+% spine.tex -- hardbound spine strip for the binder (Manual 5.1).
+% Build: latexmk spine.tex
+% Arial Narrow 16 pt bold uppercase, read top to bottom, 60 mm clear at
+% each end. Ask the binder for the real spine width and set it below.
+\documentclass[spine]{iucthesis}
+\input{metadata}
+\setlength\spinewidth{16mm}
+\begin{document}
+\makespine
+\end{document}

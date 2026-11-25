@@ -1,0 +1,48 @@
+% main.tex -- IUC thesis / dissertation / research project
+%
+% Build:  latexmk main.tex      (uses latexmkrc: XeLaTeX + biber)
+%
+% Class options:
+%   thesis | dissertation | project   wording on title page and declaration
+%   showframe                         draw text-area frame to check margins
+\documentclass[thesis]{iucthesis}
+
+\input{metadata}
+\addbibresource{references.bib}
+
+% Your own packages and macros go here.
+
+\begin{document}
+
+% ---- Cover pages (Manual 4: items 01-02) ---------------------------------
+\makecover          % outer cover, no page number
+\maketitlepage      % Roman i, number hidden
+
+% ---- Front matter (Manual 4: items 03-11) --------------------------------
+\frontmatter
+\makedeclaration                     % Roman ii
+\input{frontmatter/acknowledgement}
+% \input{frontmatter/dedication}     % optional
+\input{frontmatter/abstrak}          % Malay abstract first
+\input{frontmatter/abstract}
+\tableofcontents
+\listoftables       % lists with no entries are omitted automatically
+\listoffigures
+\listofequations
+\listofappendices
+% \input{frontmatter/abbreviations}  % optional
+
+% ---- Main text (Manual 4: items 12-14) -----------------------------------
+\mainmatter                          % Arabic 1
+\include{chapters/chapter1}
+\include{chapters/chapter2}
+\include{chapters/chapter3}
+\include{chapters/chapter4}
+\include{chapters/chapter5}
+
+\printreferences
+
+\appendix
+\include{appendices/appendixA}
+
+\end{document}
