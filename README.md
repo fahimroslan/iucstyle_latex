@@ -6,6 +6,8 @@ Manual, Edition 3.0** (issued 23 October 2026): margins, fonts, spacing,
 headings, pagination, contents and lists, captions, APA 7 references,
 appendices, cover, title page, and spine.
 
+**New to LaTeX?** Start with the [Student Guide](STUDENT_GUIDE.md).
+
 The manual remains the authority. If this template and the manual disagree,
 follow the manual and please open an issue.
 
