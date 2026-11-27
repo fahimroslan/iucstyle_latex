@@ -18,3 +18,4 @@ main.pdf
 spine.pdf
 # manual build output (the published copy is docs/IUC-LaTeX-Template-User-Manual.pdf)
 docs/manual/iuc-template-manual.pdf
+*.listing
