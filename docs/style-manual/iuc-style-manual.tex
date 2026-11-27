@@ -48,6 +48,13 @@
 \usepackage{amssymb,amsmath}
 \usepackage{caption}
 \usepackage{float}
+\usepackage{placeins}
+\renewcommand\topfraction{0.9}
+\renewcommand\bottomfraction{0.6}
+\renewcommand\textfraction{0.07}
+\renewcommand\floatpagefraction{0.75}
+\setcounter{topnumber}{1}
+\setcounter{totalnumber}{3}
 \usepackage{needspace}
 \newcommand\keepwithsample{\Needspace{200mm}}
 \usepackage{microtype}
@@ -419,7 +426,7 @@ The minimum word counts in Table~\ref{tab:words} are compulsory. The advisory
 maximums are for planning only: there is no fixed upper limit, and no exemption
 is needed to exceed them.
 
-\begin{table}[H]
+\begin{table}[htbp]
 \caption{Institution-wide minimum and advisory word counts.}
 \label{tab:words}
 \small
@@ -593,7 +600,7 @@ clear, durable, and consistent.
 The illustration uses sample details; the cover page in the submitted PDF is
 white with black lettering.
 
-\begin{figure}[H]
+\begin{figure}[tbp]
 \panelhead{Outer cover}{Format notes}
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm]
@@ -643,7 +650,7 @@ split a long award name across tightly stacked lines. Centre the lettering
 within the spine width, and match all details to the title page and official
 records. The illustration uses a sample name and year.
 
-\begin{figure}[H]
+\begin{figure}[tbp]
 \panelhead{Hardbound spines}{Format notes}
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm]
@@ -697,7 +704,7 @@ Roman:
 \stat{Balanced}{Break long titles into single-spaced lines; match the outer cover}
 \end{infogrid}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
 \panelhead{Internal title page}{Format notes}
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm]
@@ -715,7 +722,6 @@ Roman:
 \label{fig:title}
 \end{figure}
 
-\clearpage
 % ===========================================================================
 \section{Front matter}
 % ===========================================================================
@@ -733,7 +739,7 @@ The declaration confirms that the work is the candidate's own and that all
 sources are acknowledged. Use the exact wording shown below, with the date on
 the left and the signature, name, matriculation number, and address on the right.
 
-\begin{figure}[H]
+\begin{figure}[tbp]
 \panelhead{Author declaration}{Format notes}
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm]
@@ -761,7 +767,7 @@ the left and the signature, name, matriculation number, and address on the right
   justified alignment, and single spacing.}
 \end{infogrid}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
 \panelhead{Acknowledgement}{Format notes}
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm]
@@ -792,7 +798,7 @@ summarise these five elements, in order:
 \tile{Accuracy}{Ensure that both language versions are accurate.}
 \end{infogrid}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
 \panelhead{Abstrak}{Format notes}
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm]
@@ -823,7 +829,7 @@ The English abstract follows the Malay version.
   \item Many abbreviations
 \end{igitems}}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
 \panelhead{Abstract}{Format notes}
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm]
@@ -852,7 +858,7 @@ The English abstract follows the Malay version.
 
 Use single spacing, and match every title exactly to the manuscript.
 
-\begin{figure}[H]
+\begin{figure}[tbp]
 \panelhead{Table of contents}{Format notes}
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm]
@@ -880,11 +886,9 @@ Use single spacing, and match every title exactly to the manuscript.
 \stat{Omit}{a list with no entries}
 \end{infogrid}
 
-\keepwithsample
-\textbf{List of tables.} Include every numbered table, with its caption and
-page number, in manuscript order.
-
-\begin{figure}[H]
+\begin{figure}[tbp]
+{\textbf{List of tables.} Include every numbered table, with its caption and
+page number, in manuscript order.\par}\vspace{6pt}
 \panelhead{List of tables}{Format notes}
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm]
@@ -902,11 +906,9 @@ page number, in manuscript order.
 \label{fig:lot}
 \end{figure}
 
-\keepwithsample
-\textbf{List of figures.} Include every numbered figure, with its caption and
-page number, in manuscript order.
-
-\begin{figure}[H]
+\begin{figure}[tbp]
+{\textbf{List of figures.} Include every numbered figure, with its caption and
+page number, in manuscript order.\par}\vspace{6pt}
 \panelhead{List of figures}{Format notes}
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm]
@@ -924,11 +926,9 @@ page number, in manuscript order.
 \label{fig:lof}
 \end{figure}
 
-\keepwithsample
-\textbf{List of equations.} Include every numbered equation, with a short
-descriptive title and its page number. Do not reproduce the expression itself.
-
-\begin{figure}[H]
+\begin{figure}[tbp]
+{\textbf{List of equations.} Include every numbered equation, with a short
+descriptive title and its page number. Do not reproduce the expression itself.\par}\vspace{6pt}
 \panelhead{List of equations}{Format notes}
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm]
@@ -946,11 +946,9 @@ descriptive title and its page number. Do not reproduce the expression itself.
 \label{fig:loe}
 \end{figure}
 
-\keepwithsample
-\textbf{List of appendices.} Include each appendix letter, title, and starting
-page number.
-
-\begin{figure}[H]
+\begin{figure}[tbp]
+{\textbf{List of appendices.} Include each appendix letter, title, and starting
+page number.\par}\vspace{6pt}
 \panelhead{List of appendices}{Format notes}
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm]
@@ -968,7 +966,6 @@ page number.
 \label{fig:loa}
 \end{figure}
 
-\clearpage
 % ===========================================================================
 \section{Organization of the main text}
 % ===========================================================================
@@ -994,7 +991,7 @@ to explain:
   introduction or go straight to its first section.}
 \end{infogrid}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
 \panelhead{Chapter opening}{Format notes}
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm]
@@ -1013,11 +1010,9 @@ to explain:
 \label{fig:chapter}
 \end{figure}
 
-\keepwithsample
-\textbf{Continuation pages.} Use the standard 30~mm top margin, and keep all
-content within the text area.
-
-\begin{figure}[H]
+\begin{figure}[tbp]
+{\textbf{Continuation pages.} Use the standard 30~mm top margin, and keep all
+content within the text area.\par}\vspace{6pt}
 \panelhead{Chapter continuation}{Format notes}
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm]
@@ -1036,7 +1031,6 @@ content within the text area.
 \label{fig:continuation}
 \end{figure}
 
-\clearpage
 % ===========================================================================
 \section{Page layout}
 % ===========================================================================
@@ -1269,11 +1263,9 @@ Keep tables within the margins. For a large table, use one of these options:
 
 \chevrons{4}{{Landscape/page},{Split/the table},{Repeat headings/across pages},{Appendix/move it}}
 
-\keepwithsample
-\textbf{Table example.} Introduce the table in the text and place its caption
-above it.
-
-\begin{figure}[H]
+\begin{figure}[tbp]
+{\textbf{Table example.} Introduce the table in the text and place its caption
+above it.\par}\vspace{6pt}
 \panelhead{Table presentation}{Format notes}
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm]
@@ -1292,7 +1284,6 @@ above it.
 \label{fig:tablesample}
 \end{figure}
 
-\clearpage
 % ===========================================================================
 \section{Figures}
 % ===========================================================================
@@ -1325,11 +1316,9 @@ only figures that support the discussion, and refer to each one in the text.
 \tile{Margins}{Keep the figure and its caption within the margins.}
 \end{infogrid}
 
-\keepwithsample
-\textbf{Figure example.} Introduce the figure in the text, centre it, and place
-its caption and source below it.
-
-\begin{figure}[H]
+\begin{figure}[tbp]
+{\textbf{Figure example.} Introduce the figure in the text, centre it, and place
+its caption and source below it.\par}\vspace{6pt}
 \panelhead{Figure presentation}{Format notes}
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm]
@@ -1348,7 +1337,6 @@ its caption and source below it.
 \label{fig:figuresample}
 \end{figure}
 
-\clearpage
 % ===========================================================================
 \section{Equations, symbols, and units}
 % ===========================================================================
@@ -1363,11 +1351,9 @@ its caption and source below it.
   descriptive title; do not reproduce the expression.}
 \end{infogrid}
 
-\keepwithsample
-\textbf{Equation example.} Introduce the equation, number it by chapter, and
-define its symbols.
-
-\begin{figure}[H]
+\begin{figure}[tbp]
+{\textbf{Equation example.} Introduce the equation, number it by chapter, and
+define its symbols.\par}\vspace{6pt}
 \panelhead{Equation presentation}{Format notes}
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm]
@@ -1386,7 +1372,6 @@ define its symbols.
 \label{fig:equationsample}
 \end{figure}
 
-\clearpage
 % ===========================================================================
 \section{Citations and references}
 % ===========================================================================
@@ -1425,7 +1410,7 @@ Check that:
 Table~\ref{tab:cite} shows APA~7 citation forms. The sample sentences
 illustrate formatting; they are not evidence for the claims shown.
 
-\begin{table}[H]
+\begin{table}[htbp]
 \caption{Simulated author--year inline citation situations.}
 \label{tab:cite}
 \small
@@ -1511,7 +1496,7 @@ source details. These are patterns, not sources to cite.
 \end{igitems}}
 Use a paragraph or section locator when the source has no page numbers.
 
-\begin{figure}[H]
+\begin{figure}[tbp]
 \panelhead{References}{Format notes}
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm]
@@ -1529,7 +1514,6 @@ Use a paragraph or section locator when the source has no page numbers.
 \label{fig:refsample}
 \end{figure}
 
-\clearpage
 % ===========================================================================
 \section{Appendices}
 % ===========================================================================
@@ -1561,7 +1545,7 @@ proofs. Appendices follow the references and are lettered:
 
 Keep essential evidence and methods in the relevant chapter.
 
-\begin{figure}[H]
+\begin{figure}[tbp]
 \panelhead{Appendix opening}{Format notes}
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm]
@@ -1580,7 +1564,6 @@ Keep essential evidence and methods in the relevant chapter.
 \label{fig:appsample}
 \end{figure}
 
-\clearpage
 % ===========================================================================
 \section{Printing, paper, binding, and spine}
 % ===========================================================================
@@ -1709,7 +1692,7 @@ XeLaTeX and biber, and produces the manuscript PDF (Figure~\ref{fig:flow}).
 
 Table~\ref{tab:map} shows where each rule in this manual is applied.
 
-\begin{table}[H]
+\begin{table}[htbp]
 \caption{How the template applies this manual.}
 \label{tab:map}
 \small
@@ -1921,7 +1904,7 @@ the braces. Line~1 of \file{main.tex} sets the document type: \texttt{thesis},
 \declarationdate{23 October 2026}
 \end{code}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
 \panelhead{Internal title page}{Source notes}
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm]
@@ -1979,7 +1962,7 @@ item, give it a \cmd{label} and cite it with \cmd{ref}. After \cmd{appendix} in
 \end{equation}
 \end{code}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
 \panelhead{Chapter opening}{Source notes}
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm]
@@ -1999,7 +1982,7 @@ item, give it a \cmd{label} and cite it with \cmd{ref}. After \cmd{appendix} in
 \label{fig:srcchapter}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
 \panelhead{Tables and figures}{Source notes}
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm]
@@ -2026,7 +2009,7 @@ Mendeley, and EndNote export this format. Cite the entry's key.
 Table~\ref{tab:latexcite} gives the commands for the situations in
 Table~\ref{tab:cite}, with the output produced by the template.
 
-\begin{table}[H]
+\begin{table}[htbp]
 \caption{Citation commands and the output they produce.}
 \label{tab:latexcite}
 \small
@@ -2060,7 +2043,7 @@ authors in double braces, for example
 \texttt{\{\{Ministry of Education Malaysia\}\}}. Check every exported entry
 against its source.
 
-\begin{figure}[H]
+\begin{figure}[tbp]
 \panelhead{References}{Source notes}
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm]
@@ -2079,6 +2062,7 @@ against its source.
 \label{fig:srcrefs}
 \end{figure}
 
+\FloatBarrier
 \subsection{Working with AI tools}
 
 AI assistants can write and correct LaTeX, so candidates can concentrate on
@@ -2145,6 +2129,7 @@ it. Do not give participant data, unpublished results, or personal information
 to AI tools unless your ethics approval allows it.
 \end{warnbox}
 
+\FloatBarrier
 \subsection{Building, checking, and troubleshooting}
 
 Page numbers, contents, lists, and cross-references update on the following
@@ -2158,7 +2143,7 @@ LaTeX stops at the first serious error and prints a message beginning with
 change and build again to isolate a problem, and report template faults on the
 template's GitHub page under \ui{Issues}.
 
-\begin{table}[H]
+\begin{table}[htbp]
 \caption{Common error messages and their fixes.}
 \label{tab:trouble}
 \small
