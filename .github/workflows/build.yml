@@ -11,13 +11,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Compile thesis, spine, and user manual
+      - name: Compile thesis, spine, and style manual
         uses: xu-cheng/latex-action@v3
         with:
           root_file: |
             main.tex
             spine.tex
-            docs/manual/iuc-template-manual.tex
+            docs/style-manual/iuc-style-manual.tex
           latexmk_use_xelatex: true
           work_in_root_file_dir: true
 
@@ -27,4 +27,4 @@ jobs:
           path: |
             main.pdf
             spine.pdf
-            docs/manual/iuc-template-manual.pdf
+            docs/style-manual/iuc-style-manual.pdf

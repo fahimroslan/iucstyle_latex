@@ -6,8 +6,8 @@ Manual, Edition 3.0** (issued 23 October 2026): margins, fonts, spacing,
 headings, pagination, contents and lists, captions, APA 7 references,
 appendices, cover, title page, and spine.
 
-**New to LaTeX?** Read the illustrated [User Manual (PDF)](docs/IUC-LaTeX-Template-User-Manual.pdf)
-or the shorter [Student Guide](STUDENT_GUIDE.md).
+**New to LaTeX?** Read Section 19 of the [Style Manual (PDF)](docs/IUC-Thesis-Style-Manual.pdf),
+which covers the template, GitHub, and AI tools, or the shorter [Student Guide](STUDENT_GUIDE.md).
 
 The manual remains the authority. If this template and the manual disagree,
 follow the manual and please open an issue.
