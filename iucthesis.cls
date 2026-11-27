@@ -71,7 +71,7 @@
 \RequirePackage{fontspec}
 \RequirePackage{unicode-math}
 \RequirePackage[british]{babel}
-\RequirePackage{csquotes}
+\RequirePackage[style=american]{csquotes}% APA 7 uses double quotation marks
 \RequirePackage{setspace}
 \RequirePackage{graphicx}
 \RequirePackage{xcolor}
@@ -503,6 +503,8 @@
 % no extra space between entries, heading uses chapter-opening margins.
 % ---------------------------------------------------------------------------
 \RequirePackage[style=apa,backend=biber]{biblatex}
+% APA 7 follows US punctuation: commas and full stops go inside quotation marks
+\DefineBibliographyExtras{british}{\uspunctuation}
 \setlength\bibhang{1.27cm}
 \setlength\bibitemsep{0pt}
 \setlength\bibparsep{0pt}
