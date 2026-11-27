@@ -1,7 +1,7 @@
 # Student Guide: Writing Your IUC Thesis with This Template
 
 > The formatting rules, with annotated page samples, are in the
-> [IUC Style Manual (PDF)](docs/IUC-Thesis-Style-Manual.pdf); Section 19 covers this template.
+> [IUC Style Manual (PDF)](docs/IUC-Thesis-Style-Manual.pdf); Section 18 covers this template.
 
 You do **not** need to learn LaTeX to use this template. You type your own
 words into a few files. The template does all the formatting required by the
@@ -249,7 +249,7 @@ citations, and academic integrity.
 ## 7. Before you submit
 
 Go through the **Final Manuscript Review Checklist** in the Style Manual
-(Section 18), and also check:
+(Section 19), and also check:
 
 - [ ] Title and name match your registration records exactly.
 - [ ] The right document type (`thesis`, `dissertation`, or `project`) is set

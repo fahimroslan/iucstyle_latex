@@ -127,7 +127,18 @@
   arc=4pt,left=8pt,right=8pt,top=6pt,bottom=6pt,fontupper=\sffamily\small,
   before upper={\cardhead{#1}\par\smallskip}}
 
-% Callouts and code (Section 19)
+% Path cards and numbered steps (Section 18 infographics)
+\newtcolorbox{pathcard}[3]{enhanced,colback=white,colframe=#3,boxrule=0.8pt,arc=4pt,
+  left=7pt,right=7pt,top=5pt,bottom=5pt,fontupper=\sffamily\small\raggedright,
+  title={\bfseries #1\hfill\footnotesize #2},colbacktitle=#3,coltitle=white,
+  fonttitle=\sffamily,toptitle=2.5pt,bottomtitle=2.5pt}
+\newcommand\stepnum[1]{\tikz[baseline=(n.base)]\node[circle,fill=iucpurple,
+  text=white,font=\sffamily\scriptsize\bfseries,inner sep=0pt,minimum size=1.35em](n){#1};}
+\newlist{steps}{enumerate}{1}
+\setlist[steps]{label=\protect\stepnum{\arabic*},leftmargin=2.1em,labelsep=0.5em,
+  itemsep=3pt,topsep=2pt}
+
+% Callouts and code (Section 18)
 \tcbset{iucnote/.style={enhanced,boxrule=0pt,arc=2pt,left=9pt,right=9pt,top=6pt,
   bottom=6pt,before skip=8pt,after skip=8pt}}
 \newtcolorbox{warnbox}[1][Important]{iucnote,colback=iuccream,
@@ -1400,7 +1411,569 @@ Bind the final copies only after academic approval and a complete check of the
 printed proof.
 
 % ===========================================================================
-% Section 18: Final manuscript review checklist (form page)
+\section{Using the LaTeX template}\label{sec:latex}
+% ===========================================================================
+
+IUC provides a LaTeX template that applies Sections 2--17 automatically. It is
+published, with its source and documentation, at \repo. This section shows how
+the template works, how to obtain it, how to work with it on your own computer,
+online, or with AI tools, and which command produces each part of the
+manuscript.
+
+\begin{figure}[H]
+\begin{tcbraster}[raster columns=2,raster equal height=rows,raster column skip=9pt,
+  raster row skip=9pt]
+\begin{card}{What you edit}
+  \textbf{Text files only:} details in \file{metadata.tex}, chapters in
+  \file{chapters/}, sources in \file{references.bib}.\par
+  The formatting file \file{iucthesis.cls} is never edited.
+\end{card}
+\begin{card}{What it formats}
+  \textbf{Layout:} A4, IUC margins, 40~mm chapter openings.\par
+  \textbf{Text:} Times New Roman 12~pt, double spacing, IUC headings.
+\end{card}
+\begin{card}{What it generates}
+  Cover, title page, declaration, contents, and the four lists, with Roman
+  and Arabic page numbers.
+\end{card}
+\begin{card}{References}
+  \textbf{APA 7th edition} citations and reference list, sorted and formatted
+  automatically.
+\end{card}
+\begin{card}{Ways to work}
+  \textbf{Online:} Overleaf or GitHub.\par
+  \textbf{Offline:} VS Code, TeXstudio, or the command line.\par
+  \textbf{Assisted:} Claude and other AI tools.
+\end{card}
+\begin{card}{Engine and licence}
+  \textbf{XeLaTeX} with \textbf{biber}; pdfLaTeX is not supported.\par
+  Free and open: LaTeX Project Public License 1.3c.
+\end{card}
+\end{tcbraster}
+\caption{The LaTeX template at a glance.}
+\label{fig:tglance}
+\end{figure}
+
+\subsection{How the template works}
+
+Candidates write plain-text source files. The template class,
+\file{iucthesis.cls}, applies this manual when the files are compiled with
+XeLaTeX and biber, and produces the manuscript PDF (Figure~\ref{fig:flow}).
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1mm,y=1mm,
+  src/.style={rounded corners=3pt,fill=iuclav,draw=iucpurple!25,minimum width=40mm,
+    minimum height=11mm,align=left,font=\sffamily\scriptsize,text width=36mm},
+  outbox/.style={rounded corners=2pt,fill=white,draw=iucteal!50,minimum width=36mm,
+    minimum height=7mm,font=\sffamily\scriptsize},
+  arr/.style={-{Stealth[length=1.8mm]},draw=iucteal,line width=0.6pt}]
+  \node[font=\sffamily\bfseries\small,text=iucpurple] at (20,6) {YOU WRITE};
+  \node[font=\sffamily\bfseries\small,text=iucpurple] at (77.5,6) {THE TEMPLATE};
+  \node[font=\sffamily\bfseries\small,text=iucpurple] at (135,6) {YOU GET};
+  \foreach \y/\f/\d [count=\i] in {
+      -4/metadata.tex/{Title, name, degree, dates},
+      -18/frontmatter/{Acknowledgement and abstracts},
+      -32/chapters/{Your chapters},
+      -46/references.bib/{Your sources},
+      -60/figures/{Your images}}
+    \node[src] (s\i) at (20,\y) {\textbf{\texttt{\f}}\\\d};
+  \fill[iucpurple,rounded corners=4pt] (58,2) rectangle (97,-66);
+  \node[text=white,font=\sffamily\bfseries,align=center] at (77.5,-16)
+    {iucthesis.cls};
+  \node[text=white!85!iucpurple,font=\sffamily\scriptsize,align=center,text width=34mm]
+    at (77.5,-30) {Applies the margins, fonts, spacing, headings, numbering,
+    lists, captions, and APA~7 rules in this manual};
+  \node[fill=iucgold,text=iucdeep,rounded corners=2pt,font=\sffamily\bfseries\scriptsize]
+    at (77.5,-52) {XeLaTeX + biber};
+  \node[text=white,font=\ttfamily\scriptsize] at (77.5,-59) {latexmk main.tex};
+  \fill[iuccream,rounded corners=4pt] (115,2) rectangle (155,-66);
+  \node[font=\sffamily\bfseries\small,text=iucdeep] at (135,-3) {main.pdf};
+  \foreach \y/\t in {-11/Cover and title page,-19/Declaration and abstracts,
+      -27/Contents and lists,-35/Chapters,-43/References,-51/Appendices}
+    \node[outbox] at (135,\y) {\t};
+  \node[font=\sffamily\scriptsize,text=iucgrey] at (135,-60) {+ spine.pdf from spine.tex};
+  \foreach \i in {1,...,5} \draw[arr] (s\i.east) -- (57.5,{-4-(\i-1)*14});
+  \draw[arr,line width=1.2pt] (97.5,-32) -- (114.5,-32);
+\end{tikzpicture}
+\caption{From source files to the manuscript PDF.}
+\label{fig:flow}
+\end{figure}
+
+Table~\ref{tab:map} shows where each rule in this manual is applied.
+
+\begin{table}[H]
+\caption{How the template applies this manual.}
+\label{tab:map}
+\small
+\begin{tabularx}{\textwidth}{@{}p{38mm}X>{\ttfamily\raggedright\arraybackslash}p{40mm}@{}}
+\toprule
+\thd{Rule (Section)} & \thd{Template behaviour} & \normalfont\thd{Command or file} \\
+\midrule
+Cover and title page (5)     & Generated from your details; white cover page in the PDF & metadata.tex \\
+Front matter order (4, 6)    & Fixed order; empty lists omitted automatically           & main.tex \\
+Margins, spacing (8)         & Applied automatically; 40~mm at chapter openings          & (automatic) \\
+Page numbering (9)           & Roman i (hidden) to Arabic 1 at Chapter 1                 & \textbackslash mainmatter \\
+Headings (10)                & Three levels; a fourth level stops the build              & \textbackslash chapter, \textbackslash section, \textbackslash subsection \\
+Tables (12)                  & Numbered by chapter; caption above                       & \textbackslash caption, \textbackslash tablenote \\
+Figures (13)                 & Numbered by chapter; caption below                       & \textbackslash caption, \textbackslash figuresource \\
+Equations (14)               & Numbered by chapter; titled in the list                  & \textbackslash eqtitle \\
+Citations, references (15)   & APA 7 via biblatex-apa                                   & \textbackslash parencite, references.bib \\
+Appendices (16)              & APPENDIX A, B, \ldots; listed automatically              & \textbackslash appendix \\
+Spine (5.1)                  & Spine strip for the binder                               & spine.tex \\
+\bottomrule
+\end{tabularx}
+\par\smallskip\raggedright\small\textit{Note.} The template does not count words,
+judge academic content, or check that references exist.
+\end{table}
+
+\subsection{Getting the template}
+
+\textbf{Download.} On \repo, click \ui{Code}\then\ui{Download ZIP}. Use this for
+Overleaf or your own computer.
+
+\textbf{Your own repository.} Use this for GitHub online and Claude Code.
+\begin{enumerate}[itemsep=1pt,topsep=2pt]
+  \item Sign in to GitHub and open the template page.
+  \item Click \ui{Use this template}\then\ui{Create a new repository}
+        (or \ui{Fork} if that button is not shown).
+  \item Name the repository, select \ui{Private}, and click \ui{Create repository}.
+\end{enumerate}
+Keep unpublished research, participant data, and passwords out of any
+repository. Figure~\ref{fig:repomap} shows what the repository contains.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1mm,y=1mm]
+  \fill[iuclav,rounded corners=4pt] (0,0) rectangle (155,-104);
+  \newcommand\fileicon[2]{%
+    \fill[white,draw=iucpurple!60,line width=0.4pt] (#1,#2) -- ++(3.2,0) -- ++(1.3,-1.3)
+      -- ++(0,-4.2) -- ++(-4.5,0) -- cycle;}
+  \newcommand\foldericon[2]{%
+    \fill[iucgold!80,draw=iucgold!60!black,line width=0.3pt] (#1,#2-1) rectangle ++(5.5,-4.5);
+    \fill[iucgold!80,draw=iucgold!60!black,line width=0.3pt] (#1,#2-1) -- ++(0,0.8)
+      -- ++(2.2,0) -- ++(0.5,-0.8) -- cycle;}
+  \foreach \kind/\name/\desc/\badge/\col [count=\i] in {
+      f/metadata.tex/{Title, name, matric number, degree, dates}/EDIT/iucteal,
+      f/main.tex/{Part order; document type on line 1}/LINE 1 ONLY/iucteal!70,
+      d/frontmatter/{Acknowledgement, abstracts, optional pages}/EDIT/iucteal,
+      d/chapters/{chapter1.tex to chapter5.tex}/EDIT/iucteal,
+      d/appendices/{appendixA.tex and further appendices}/EDIT/iucteal,
+      f/references.bib/{Reference entries in BibTeX format}/EDIT/iucteal,
+      d/figures/{Images used in figures}/ADD IMAGES/iucteal,
+      f/spine.tex/{Spine strip for the binder}/BUILD ONLY/iucgrey,
+      f/iucthesis.cls/{The formatting rules}/DO NOT EDIT/iucrose!85!black,
+      f/{latexmkrc, .vscode/, .github/}/{Build settings}/DO NOT EDIT/iucrose!85!black,
+      d/docs/{This manual and its source}/READ/iucgrey} {
+    \pgfmathsetmacro\y{-4-(\i-1)*9}
+    \if\kind f\fileicon{6}{\y}\else\foldericon{5.5}{\y}\fi
+    \node[anchor=west,font=\ttfamily\footnotesize,text=iucdeep] at (14,\y-3) {\name};
+    \node[anchor=west,font=\sffamily\scriptsize] at (74,\y-3) {\desc};
+    \node[anchor=east,fill=\col,text=white,rounded corners=1.5pt,inner sep=1.6pt,
+      font=\sffamily\bfseries\scriptsize] at (151,\y-3) {\badge};
+  }
+\end{tikzpicture}
+\caption{Repository map: what each file and folder holds, and whether you edit it.}
+\label{fig:repomap}
+\end{figure}
+
+\subsection{Choosing a workflow}
+
+All workflows use the same files and produce the same PDF. Use
+Figure~\ref{fig:choose} to choose one, and Figure~\ref{fig:quick} to start.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  q/.style={rectangle,rounded corners=3pt,fill=iuclav,draw=iucpurple!50,line width=0.5pt,
+    align=center,text width=50mm,minimum height=11mm,font=\sffamily\small},
+  a/.style={rectangle,rounded corners=3pt,fill=#1,text=white,align=center,
+    text width=36mm,minimum height=10mm,font=\sffamily\small\bfseries},
+  lab/.style={font=\sffamily\scriptsize\bfseries,text=iucgrey},
+  arr/.style={-{Stealth[length=2.2mm]},line width=0.7pt,draw=iucteal},
+  node distance=8mm and 14mm]
+  \node[q] (q1) {Should an AI edit the files and build the PDF for you?};
+  \node[a=iucdeep,right=of q1] (d) {D.\ AI assistant (Claude Code)};
+  \node[q,below=of q1] (q2) {Can you install about 4 GB of software?};
+  \node[a=iucteal,right=of q2] (b) {B.\ Own computer};
+  \node[q,below=of q2] (q3) {Do you want automatic backups and version history?};
+  \node[a=iucrose!85!black,right=of q3] (c) {C.\ GitHub online};
+  \node[a=iucpurple,below=of q3] (a) {A.\ Overleaf};
+  \draw[arr] (q1) -- node[lab,above]{yes} (d);
+  \draw[arr] (q1) -- node[lab,left]{no} (q2);
+  \draw[arr] (q2) -- node[lab,above]{yes} (b);
+  \draw[arr] (q2) -- node[lab,left]{no} (q3);
+  \draw[arr] (q3) -- node[lab,above]{yes} (c);
+  \draw[arr] (q3) -- node[lab,left]{no} (a);
+\end{tikzpicture}
+\caption{Choosing a workflow; read from top to bottom.}
+\label{fig:choose}
+\end{figure}
+
+\begin{figure}[H]
+\begin{tcbraster}[raster columns=2,raster equal height=rows,raster column skip=8pt,
+  raster row skip=8pt]
+\begin{pathcard}{A\enspace Overleaf}{online}{iucpurple}
+\begin{steps}
+  \item Download the template as a ZIP file.
+  \item \ui{New Project}\then\ui{Upload Project}.
+  \item \ui{Menu}: set \ui{Compiler} to \ui{XeLaTeX}.
+  \item \ui{Recompile}, then download the PDF.
+\end{steps}
+\textit{Not yet tested on Overleaf; check the sample builds first.}
+\end{pathcard}
+\begin{pathcard}{B\enspace Own computer}{offline}{iucteal}
+\begin{steps}
+  \item Install TeX Live or MacTeX from \texttt{tug.org}.
+  \item Install VS Code and \textbf{LaTeX Workshop}.
+  \item Open the folder and \ui{Build} \texttt{main.tex}.
+\end{steps}
+TeXstudio: set the compiler to XeLaTeX and the bibliography tool to Biber.
+\end{pathcard}
+\begin{pathcard}{C\enspace GitHub online}{online}{iucrose!85!black}
+\begin{steps}
+  \item Make your own private repository.
+  \item Edit with the pencil icon; \ui{Commit changes}.
+  \item \ui{Actions}\then latest run\then\textbf{Artifacts}.
+  \item \ui{History} restores any earlier version.
+\end{steps}
+\end{pathcard}
+\begin{pathcard}{D\enspace AI assistant}{online}{iucdeep}
+\begin{steps}
+  \item Open \texttt{claude.ai/code}; connect GitHub.
+  \item Select your thesis repository.
+  \item Describe the change in plain words.
+  \item Review; ask Claude to commit and push.
+\end{steps}
+\end{pathcard}
+\end{tcbraster}
+\caption{Quick start for each workflow.}
+\label{fig:quick}
+\end{figure}
+
+\textbf{Notes on the workflows.} With Overleaf's default pdfLaTeX setting the
+build stops with \emph{This class needs XeLaTeX or LuaLaTeX}; free accounts also
+limit build time. On your own computer, the included
+\file{.vscode/settings.json} makes LaTeX Workshop use XeLaTeX and biber, and
+\texttt{latexmk main.tex} builds from a terminal. On GitHub, each build takes
+about four minutes, and \ui{Settings}\then\ui{Collaborators} gives a supervisor
+access. Where Times New Roman and Arial Narrow are installed the template uses
+them; otherwise it uses the metric-compatible TeX Gyre Termes and TeX Gyre Heros
+Condensed, with the same layout.
+
+\subsection{The writing cycle}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1mm,y=1mm,
+  lab/.style={anchor=north west,font=\sffamily\bfseries\color{iucpurple},align=left},
+  item/.style={anchor=west,font=\sffamily\small,align=left},
+  num/.style={anchor=west,font=\sffamily\bfseries\small\color{iucdeep}},
+  arr/.style={-{Stealth[length=1.8mm]},draw=iucteal,line width=0.6pt}]
+  \foreach \y/\h/\name/\items in {
+     0/22/Set up/{{01}/Get your copy of the template,{02}/Enter your details in \texttt{metadata.tex}},
+    -27/30/Write/{{03}/Replace the sample text in each chapter,{04}/Add sources to \texttt{references.bib},{05}/Add tables{,} figures{,} and equations},
+    -62/22/Check/{{06}/Build the PDF and read every page,{07}/Fix errors (Table~\ref{tab:trouble})},
+    -89/22/Submit/{{08}/Complete the checklist (Section~\ref{sec:checklist}),{09}/Submit the PDF; give \texttt{spine.pdf} to the binder}} {
+    \fill[iuclav,rounded corners=3pt] (0,\y) rectangle (155,\y-\h);
+    \fill[iuctealbg,rounded corners=3pt] (0,\y) rectangle (36,\y-\h);
+    \fill[iuctealbg] (30,\y) rectangle (36,\y-\h);
+    \node[lab] at (4,\y-4) {\name};
+    \foreach \n/\t [count=\k] in \items {
+      \node[num] at (41,\y-6-\k*7.5+7.5) {\n};
+      \node[item] at (49,\y-6-\k*7.5+7.5) {\t};
+    }
+  }
+  \draw[arr] (12,-22) -- (12,-27);
+  \draw[arr] (12,-57) -- (12,-62);
+  \draw[arr] (12,-84) -- (12,-89);
+  \draw[arr] (24,-62) -- (24,-57);
+  \node[font=\sffamily\scriptsize\itshape,text=iucteal,anchor=west] at (25,-59.5) {repeat};
+\end{tikzpicture}
+\caption{The writing cycle; read from top to bottom. Checking returns to writing
+until the manuscript is complete.}
+\label{fig:cycle}
+\end{figure}
+
+\subsection{Entering your details}
+
+Enter your details once, in \file{metadata.tex}. They are reused on the cover,
+title page, declaration, PDF properties, and spine. Replace only the text inside
+the braces. Line~1 of \file{main.tex} sets the document type: \texttt{thesis},
+\texttt{dissertation}, or \texttt{project}.
+
+\begin{code}
+\title{Strategic Leadership and Organisational\\ Performance in Higher Education}
+\author{Nur Aina Binti Rahman}             % full registered name
+\matricno{IUC/PhD/2026/001}
+\address{Kuala Lumpur, Malaysia}
+\degree{Doctor of Philosophy in Management} % full degree name
+\degreeabbr{PhD}                            % abbreviation for the spine
+\submissiondate{October 2026}              % month and year
+\submissionyear{2026}                      % year on the spine
+\declarationdate{23 October 2026}
+\end{code}
+
+\begin{figure}[H]
+\panelhead{Internal title page}{Source notes}
+\centering
+\begin{tikzpicture}[x=1mm,y=1mm]
+  \samplepage{1}{20}{30}{92.5}{128.5}{60 mm}{40 mm}{40 mm}{25 mm}
+  \fnote{1}{-6}{Title}{\cmd{title}\{\} in \texttt{metadata.tex};
+    \texttt{\textbackslash\textbackslash} balances the lines.}{87,-31.5}
+  \fnote{2}{-30}{Name}{\cmd{author}\{\}, as registered.}{67,-57}
+  \fnote{3}{-54}{Statement and degree}{Class option \texttt{thesis},
+    \texttt{dissertation}, or \texttt{project}; \cmd{degree}\{\}.}{80,-81.5}
+  \fnote{4}{-78}{Institution}{\cmd{institution}\{\}, preset to IUC.}{75,-105}
+  \fnote{5}{-102}{Submission date}{\cmd{submissiondate}\{\}: month and year.}{63,-127.5}
+  \fnote{6}{-126}{Pagination}{Automatic: Roman page~i, number hidden.}{56,-140}
+  \scalenote
+\end{tikzpicture}
+\caption{Title-page sample with source notes: \cmd{maketitlepage} in \file{main.tex}.}
+\label{fig:srctitle}
+\end{figure}
+
+\subsection{Writing chapters, tables, figures, and equations}
+
+Write chapters in \file{chapters/chapter1.tex} and the following files. A blank
+line starts a new paragraph. Type \texttt{\textbackslash\%},
+\texttt{\textbackslash\&}, \texttt{\textbackslash\$}, \texttt{\textbackslash\#},
+and \texttt{\textbackslash\_} to print those characters. To refer to a numbered
+item, give it a \cmd{label} and cite it with \cmd{ref}. After \cmd{appendix} in
+\file{main.tex}, each \cmd{chapter} becomes an appendix.
+
+\begin{code}
+\chapter{Literature Review}
+\section{Leadership Theories}
+\subsection{Transformational Leadership}
+
+\begin{table}[htbp]
+  \caption{Respondent Demographics}        % caption above the table
+  \label{tab:demographics}
+  \begin{tabular}{lcc}
+    \toprule
+    Group & Number & Percentage \\
+    \midrule
+    Male  & 120    & 48\% \\
+    \bottomrule
+  \end{tabular}
+  \tablenote{Percentages are rounded.}
+\end{table}
+
+\begin{figure}[htbp]
+  \includegraphics[width=0.8\textwidth]{figures/framework}
+  \caption{Research Framework}             % caption below the figure
+  \figuresource{Adapted from Smith (2023).}
+\end{figure}
+
+\begin{equation}
+  y = \beta_0 + \beta_1 x + \varepsilon
+  \eqtitle{Linear Regression Model}        % title in the list of equations
+\end{equation}
+\end{code}
+
+\begin{figure}[H]
+\panelhead{Chapter opening}{Source notes}
+\centering
+\begin{tikzpicture}[x=1mm,y=1mm]
+  \openpage{11}
+  \fnote{1}{-6}{Chapter heading}{\cmd{chapter}\{Introduction\}: number, title,
+    and 40~mm top margin are automatic.}{62.5,-21.5}
+  \fnote{2}{-32}{Section}{\cmd{section}\{Purpose\}: numbered 1.1.}{33,-35}
+  \fnote{3}{-58}{Body text}{Your paragraphs in \texttt{chapters/chapter1.tex};
+    spacing and indents are automatic.}{92.5,-42}
+  \fnote{4}{-84}{Subsection}{\cmd{subsection}\{\}: numbered 1.3.1, the lowest
+    permitted level.}{47.5,-78.4}
+  \fnote{5}{-110}{Pagination}{\cmd{mainmatter} in \texttt{main.tex} starts
+    Arabic page~1.}{57,-141}
+  \scalenote
+\end{tikzpicture}
+\caption{Chapter-opening sample with source notes.}
+\label{fig:srcchapter}
+\end{figure}
+
+\begin{figure}[H]
+\panelhead{Tables and figures}{Source notes}
+\centering
+\begin{tikzpicture}[x=1mm,y=1mm]
+  \openpage{14}
+  \fnote{1}{-6}{Cross-reference}{\texttt{Table\textasciitilde\textbackslash ref\{\ldots\}}
+    fills in the number.}{69.5,-41.2}
+  \fnote{2}{-28}{Table caption}{\cmd{caption}\{\} before the table body.}{72.5,-46}
+  \fnote{3}{-50}{Rules}{\cmd{toprule}, \cmd{midrule}, \cmd{bottomrule}.}{73.5,-53}
+  \fnote{4}{-72}{Table note}{\cmd{tablenote}\{\} after the table.}{69,-60}
+  \fnote{5}{-94}{Artwork}{\cmd{includegraphics} with an image from
+    \texttt{figures/}.}{78,-95}
+  \fnote{6}{-118}{Caption and source}{\cmd{caption}\{\} after the image, then
+    \cmd{figuresource}\{\}.}{77.5,-113}
+  \scalenote
+\end{tikzpicture}
+\caption{Table and figure sample with source notes.}
+\label{fig:srcfloats}
+\end{figure}
+
+\subsection{Citations in the template}\label{sec:latexcite}
+
+Each source is an entry in \file{references.bib}; Google Scholar, Zotero,
+Mendeley, and EndNote export this format. Cite the entry's key.
+Table~\ref{tab:latexcite} gives the commands for the situations in
+Table~\ref{tab:cite}, with the output produced by the template.
+
+\begin{table}[H]
+\caption{Citation commands and the output they produce.}
+\label{tab:latexcite}
+\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{27mm}>{\ttfamily\raggedright\arraybackslash}p{66mm}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\thd{Situation} & \normalfont\thd{Command} & \thd{Output} \\
+\midrule
+Narrative                    & \textbackslash textcite\{lamport1994\}            & Lamport (1994) \\
+Parenthetical                & \textbackslash parencite\{lamport1994\}           & (Lamport, 1994) \\
+Two authors                  & \textbackslash parencite\{creswell2018\}          & (Creswell \& Creswell, 2018) \\
+Three or more authors        & \textbackslash textcite\{devlin2019\}             & Devlin et al.\ (2019) \\
+Multiple sources             & \textbackslash parencite\{lamport1994,knuth1984\} & (Knuth, 1984; Lamport, 1994) \\
+Page                         & \textbackslash parencite[p.\textasciitilde 18]\{lamport1994\} & (Lamport, 1994, p.~18) \\
+Page range                   & \textbackslash parencite[pp.\textasciitilde 3-{}-5]\{creswell2018\} & (Creswell \& Creswell, 2018, pp.~3--5) \\
+Same author, several years   & \textbackslash parencite\{smith2020,smith2023\}   & (Smith, 2020, 2023) \\
+Same author and year         & \textbackslash parencite\{brown2022a,brown2022b\} & (Brown, 2022a, 2022b) \\
+Group author                 & \textbackslash parencite\{apa2020\}               & First (American Psychological Association [APA], 2020); later (APA, 2020) \\
+Secondary source             & \textbackslash parencite[Bandura, 1977, as cited in][]\{smith2023\} & (Bandura, 1977, as cited in Smith, 2023) \\
+No author                    & \textbackslash parencite\{standards2024\}         & (``Template Standards,'' 2024) \\
+No date                      & \textbackslash parencite\{iucguide\}              & (Innovative University College, n.d.) \\
+\bottomrule
+\end{tabularx}
+\par\smallskip\raggedright\small\textit{Note.} The letters a and b, the
+abbreviation in brackets (from the entry's \texttt{shortauthor} field), and n.d.\
+are added automatically. Personal communications are typed directly in the text.
+\end{table}
+
+The template sets titles in sentence case, so put proper nouns and acronyms in
+braces, for example \texttt{\{Malaysian\}} or \texttt{\{BERT\}}, and group
+authors in double braces, for example
+\texttt{\{\{Ministry of Education Malaysia\}\}}. Check every exported entry
+against its source.
+
+\begin{figure}[H]
+\panelhead{References}{Source notes}
+\centering
+\begin{tikzpicture}[x=1mm,y=1mm]
+  \openpage{15}
+  \fnote{1}{-6}{Heading}{\cmd{printreferences} in \texttt{main.tex}.}{63.5,-21.5}
+  \fnote{2}{-32}{Entries}{From \texttt{references.bib}; only cited sources
+    appear.}{92.5,-30}
+  \fnote{3}{-58}{Hanging indent}{1.27~cm indent and double spacing are
+    automatic.}{25.5,-34.3}
+  \fnote{4}{-84}{APA formatting}{Italics, sentence case, and punctuation are
+    applied automatically.}{49,-38.4}
+  \fnote{5}{-110}{Order}{Sorted alphabetically by first author.}{19.3,-42.6}
+  \scalenote
+\end{tikzpicture}
+\caption{References sample with source notes.}
+\label{fig:srcrefs}
+\end{figure}
+
+\subsection{Working with AI tools}
+
+AI assistants can write and correct LaTeX, so candidates can concentrate on
+content. Figure~\ref{fig:aitools} compares three ways to use them.
+
+\begin{figure}[H]
+\begin{tcbraster}[raster columns=3,raster equal height,raster column skip=7pt]
+\begin{pathcard}{Claude Code}{}{iucdeep}
+  \textbf{The AI} edits your repository, builds and checks the PDF, and saves
+  the changes.\par
+  \textbf{You} describe each change in plain words.\par
+  \textbf{PDF:} built for you.
+\end{pathcard}
+\begin{pathcard}{Claude Projects}{}{iucpurple}
+  \textbf{The AI} drafts LaTeX with the template and this manual as
+  context.\par
+  \textbf{You} paste its answers into your files.\par
+  \textbf{PDF:} you build it.
+\end{pathcard}
+\begin{pathcard}{Any AI chat}{}{iucteal}
+  \textbf{The AI} answers one request at a time: Claude, ChatGPT, Gemini, or
+  Copilot.\par
+  \textbf{You} paste text in and copy LaTeX out.\par
+  \textbf{PDF:} you build it.
+\end{pathcard}
+\end{tcbraster}
+\caption{Three ways to use AI with the template.}
+\label{fig:aitools}
+\end{figure}
+
+\begin{promptbox}{Example requests for Claude Code}
+Put my details in metadata.tex: title \ldots, name \ldots, matric number \ldots,
+Master of Business Administration, submitted March 2027.\par
+Add the attached survey results to Chapter 4 as a table captioned Respondent
+Demographics.\par
+Build the PDF and show me the contents page.
+\end{promptbox}
+
+\textbf{Claude Projects.} Create a project, add the repository under
+\textbf{Project knowledge}\then\ui{GitHub}, upload this manual, and paste the
+instructions below. Click \ui{Sync} after changing files on GitHub.
+
+\begin{prompttext}
+I am writing an IUC thesis with the iucthesis LaTeX template in this project.
+- Follow the IUC Style Manual and the template README.
+- Use only \chapter, \section, and \subsection.
+- Tables: \caption above the table; \tablenote{} for notes.
+- Figures: \caption below the figure; \figuresource{} for the source.
+- Every numbered equation needs \eqtitle{Short title}.
+- Cite with \textcite{} or \parencite{} (APA 7); give BibTeX for new sources.
+- Return LaTeX that I can paste straight into my chapter files.
+\end{prompttext}
+
+\textbf{Any AI chat assistant.} State that you use the IUC \emph{iucthesis} LaTeX
+template, then ask, for example, to convert Word text to LaTeX, turn data into a
+table with a caption and \cmd{tablenote}, create BibTeX entries with protected
+capitals, or explain a build error.
+
+\begin{warnbox}[Responsible use]
+Candidates are responsible for everything in their thesis. AI tools can invent
+sources, so verify every reference in the original publication or database.
+Follow your programme's rules on AI use, including any requirement to declare
+it. Do not give participant data, unpublished results, or personal information
+to AI tools unless your ethics approval allows it.
+\end{warnbox}
+
+\subsection{Building, checking, and troubleshooting}
+
+Page numbers, contents, lists, and cross-references update on the following
+build; \texttt{latexmk}, Overleaf, VS Code, and GitHub repeat builds as needed.
+Add \texttt{showframe} to line~1 of \file{main.tex} to draw the text area while
+checking margins, and remove it before submission. Build \file{spine.tex} for
+the binder's spine strip (Figure~\ref{fig:spine}).
+
+LaTeX stops at the first serious error and prints a message beginning with
+\texttt{!}. Table~\ref{tab:trouble} lists common causes. Undo the most recent
+change and build again to isolate a problem, and report template faults on the
+template's GitHub page under \ui{Issues}.
+
+\begin{table}[H]
+\caption{Common error messages and their fixes.}
+\label{tab:trouble}
+\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{46mm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+\toprule
+\thd{Message or symptom} & \thd{Usual cause} & \thd{Fix} \\
+\midrule
+\texttt{This class needs XeLaTeX} & pdfLaTeX selected & Select XeLaTeX \\
+\texttt{Missing \$ inserted} & \texttt{\_} or \texttt{\^{}} in normal text & Type \texttt{\textbackslash\_} or \texttt{\textbackslash\^{}\{\}} \\
+Rest of a line missing & \texttt{\%} begins a comment & Type \texttt{\textbackslash\%} \\
+\texttt{Missing \}} or \texttt{Runaway argument} & An unclosed \texttt{\{} & Close the brace \\
+\texttt{Undefined control sequence} & Misspelt command & Check the spelling after \texttt{\textbackslash} \\
+\texttt{Citation `\ldots' undefined} & Key not in \file{references.bib} & Check the key; build again \\
+\texttt{??} instead of a number & Not yet updated & Build again \\
+\texttt{\textbackslash subsubsection is not permitted} & A fourth heading level & Use \cmd{subsection} \\
+Title printed in lowercase & Unprotected capitals in \file{.bib} & Put the word in braces \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% ===========================================================================
+% Section 19: Final manuscript review checklist (form page, last page before the back cover)
 % ===========================================================================
 \clearpage
 \iucstripfalse
@@ -1473,328 +2046,6 @@ corrections are complete.
 \restoregeometry
 \clearpage
 \iucstriptrue
-
-% ===========================================================================
-\section{Using the LaTeX template}\label{sec:latex}
-% ===========================================================================
-
-IUC provides a LaTeX template that applies Sections 2--17 automatically. It is
-published, with its source and documentation, at \repo. This section explains
-how to obtain it, how to work with it on your own computer, online, or with AI
-tools, and which command produces each element of the manuscript.
-
-\subsection{What the template does}
-
-Candidates edit plain-text files: their details in \file{metadata.tex}, their
-chapters in \file{chapters/}, and their sources in \file{references.bib}. The
-template produces the PDF. Table~\ref{tab:map} shows how the rules in this
-manual are applied.
-
-\begin{table}[htbp]
-\caption{How the template applies this manual.}
-\label{tab:map}
-\small
-\begin{tabularx}{\textwidth}{@{}p{38mm}X>{\ttfamily\raggedright\arraybackslash}p{40mm}@{}}
-\toprule
-\thd{Rule (Section)} & \thd{Template behaviour} & \normalfont\thd{Command or file} \\
-\midrule
-Cover and title page (5)     & Generated from your details; white cover page in the PDF & metadata.tex \\
-Front matter order (4, 6)    & Fixed order; empty lists omitted automatically           & main.tex \\
-Margins, spacing (8)         & Applied automatically; 40~mm at chapter openings          & (automatic) \\
-Page numbering (9)           & Roman i (hidden) to Arabic 1 at Chapter 1                 & \textbackslash mainmatter \\
-Headings (10)                & Three levels; a fourth level stops the build              & \textbackslash chapter, \textbackslash section, \textbackslash subsection \\
-Tables (12)                  & Numbered by chapter; caption above                       & \textbackslash caption, \textbackslash tablenote \\
-Figures (13)                 & Numbered by chapter; caption below                       & \textbackslash caption, \textbackslash figuresource \\
-Equations (14)               & Numbered by chapter; titled in the list                  & \textbackslash eqtitle \\
-Citations, references (15)   & APA 7 via biblatex-apa                                   & \textbackslash parencite, references.bib \\
-Appendices (16)              & APPENDIX A, B, \ldots; listed automatically              & \textbackslash appendix \\
-Spine (5.1)                  & Spine strip for the binder                               & spine.tex \\
-\bottomrule
-\end{tabularx}
-\par\smallskip\raggedright\small\textit{Note.} The template does not count words,
-judge academic content, or check that references exist.
-\end{table}
-
-\subsection{Getting the template}
-
-\textbf{Download.} On \repo, click \ui{Code}\then\ui{Download ZIP}. Use this for
-Overleaf or your own computer.
-
-\textbf{Your own repository.} Sign in to GitHub and open the template page.
-\begin{enumerate}[itemsep=1pt,topsep=2pt]
-  \item Click \ui{Use this template}\then\ui{Create a new repository}
-        (or \ui{Fork} if that button is not shown).
-  \item Name the repository, select \ui{Private}, and click \ui{Create repository}.
-\end{enumerate} Use this for GitHub online and
-Claude Code. Keep unpublished research, participant data, and passwords out of
-any repository.
-
-\begin{table}[htbp]
-\caption{Contents of the template repository.}
-\label{tab:files}
-\small
-\begin{tabularx}{\textwidth}{@{}>{\ttfamily}p{46mm}X>{\centering\arraybackslash}p{15mm}@{}}
-\toprule
-\normalfont\thd{File or folder} & \thd{Contents} & \thd{You edit} \\
-\midrule
-metadata.tex          & Title, name, matric number, address, degree, dates     & Yes \\
-main.tex              & Order of the parts; document type on line~1             & Rarely \\
-frontmatter/          & Acknowledgement, Abstrak, Abstract, optional pages     & Yes \\
-chapters/             & \texttt{chapter1.tex} to \texttt{chapter5.tex}          & Yes \\
-appendices/           & \texttt{appendixA.tex} and further appendices           & Yes \\
-references.bib        & Reference entries in BibTeX format                     & Yes \\
-figures/              & Images used in figures                                 & Yes \\
-spine.tex             & Spine strip for the binder                             & No \\
-iucthesis.cls         & The formatting rules                                   & No \\
-latexmkrc, .vscode/, .github/ & Build settings                                 & No \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-\subsection{Choosing a workflow}
-
-All workflows produce the same PDF (Table~\ref{tab:paths}).
-
-\begin{table}[htbp]
-\caption{Workflows for the template.}
-\label{tab:paths}
-\small
-\begin{tabularx}{\textwidth}{@{}p{28mm}XXp{16mm}@{}}
-\toprule
-\thd{Workflow} & \thd{How it works} & \thd{Best for} & \thd{Install} \\
-\midrule
-Overleaf        & Edit and build in a web browser             & First-time LaTeX users             & Nothing \\
-Own computer    & Free LaTeX system and an editor             & Long-term or offline work          & About 4 GB \\
-GitHub online   & Edit on github.com; PDF built automatically & Backups, history, supervisor access & Nothing \\
-AI assistant    & Describe changes; AI writes the LaTeX       & Anyone; combines with the others   & Nothing \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-\textbf{Overleaf.} Upload the ZIP with \ui{New Project}\then\ui{Upload Project}.
-In \ui{Menu}, set \ui{Compiler} to \ui{XeLaTeX}, then click \ui{Recompile}. The
-template has not yet been tested on Overleaf; confirm that the sample builds
-before writing. Free accounts limit build time, which a long thesis with many
-images can exceed.
-
-\textbf{Own computer.} Install TeX Live (Windows, Linux) or MacTeX (macOS) from
-\texttt{tug.org}. In Visual Studio Code, install the \textbf{LaTeX Workshop}
-extension, open the template folder, and click \ui{Build LaTeX project}; the
-included \file{.vscode/settings.json} selects XeLaTeX and biber. In TeXstudio,
-set \ui{Default Compiler} to \ui{XeLaTeX} and \ui{Default Bibliography Tool} to
-\ui{Biber}. From a terminal:
-
-\begin{shell}
-latexmk main.tex        # build main.pdf
-latexmk spine.tex       # build spine.pdf for the binder
-latexmk -c              # remove temporary files
-\end{shell}
-
-\textbf{GitHub online.} Edit a file with the pencil icon and click
-\ui{Commit changes}. GitHub builds the PDF in about four minutes; download it
-from \ui{Actions}\then latest run\then\textbf{Artifacts}. \ui{History} shows and
-restores every earlier version, and \ui{Settings}\then\ui{Collaborators} gives a
-supervisor access.
-
-\textbf{Fonts.} Where Times New Roman and Arial Narrow are installed, the
-template uses them. Otherwise it uses the metric-compatible TeX Gyre Termes and
-TeX Gyre Heros Condensed, with the same layout. All fonts are embedded in the PDF.
-
-\subsection{Entering your details and writing}
-
-Enter your details once, in \file{metadata.tex}; they are reused on the cover,
-title page, declaration, and spine. Replace only the text inside the braces.
-
-\begin{code}
-\title{Strategic Leadership and Organisational\\ Performance in Higher Education}
-\author{Nur Aina Binti Rahman}             % full registered name
-\matricno{IUC/PhD/2026/001}
-\address{Kuala Lumpur, Malaysia}
-\degree{Doctor of Philosophy in Management} % full degree name
-\degreeabbr{PhD}                            % abbreviation for the spine
-\submissiondate{October 2026}              % month and year
-\submissionyear{2026}                      % year on the spine
-\declarationdate{23 October 2026}
-\end{code}
-
-Line~1 of \file{main.tex} sets the document type: \texttt{thesis},
-\texttt{dissertation}, or \texttt{project}. Write chapters in
-\file{chapters/chapter1.tex} and the following files. A blank line starts a new
-paragraph. Type \texttt{\textbackslash\%}, \texttt{\textbackslash\&},
-\texttt{\textbackslash\$}, \texttt{\textbackslash\#}, and
-\texttt{\textbackslash\_} to print those characters.
-
-\begin{code}
-\chapter{Literature Review}
-\section{Leadership Theories}
-\subsection{Transformational Leadership}
-
-\begin{table}[htbp]
-  \caption{Respondent Demographics}        % caption above the table
-  \label{tab:demographics}
-  \begin{tabular}{lcc}
-    \toprule
-    Group & Number & Percentage \\
-    \midrule
-    Male  & 120    & 48\% \\
-    \bottomrule
-  \end{tabular}
-  \tablenote{Percentages are rounded.}
-\end{table}
-
-\begin{figure}[htbp]
-  \includegraphics[width=0.8\textwidth]{figures/framework}
-  \caption{Research Framework}             % caption below the figure
-  \figuresource{Adapted from Smith (2023).}
-\end{figure}
-
-\begin{equation}
-  y = \beta_0 + \beta_1 x + \varepsilon
-  \eqtitle{Linear Regression Model}        % title in the list of equations
-\end{equation}
-\end{code}
-
-To refer to a numbered item, give it a \cmd{label} and cite it with
-\cmd{ref}, for example
-\texttt{Table\textasciitilde\textbackslash ref\{tab:demographics\}}. After
-\cmd{appendix} in \file{main.tex}, each \cmd{chapter} becomes an appendix.
-
-\subsection{Citations in the template}\label{sec:latexcite}
-
-Each source is an entry in \file{references.bib}; Google Scholar, Zotero,
-Mendeley, and EndNote export this format. Cite the entry's key.
-Table~\ref{tab:latexcite} gives the commands for the situations in
-Table~\ref{tab:cite}, with the output produced by the template.
-
-\begin{table}[htbp]
-\caption{Citation commands and the output they produce.}
-\label{tab:latexcite}
-\small
-\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{27mm}>{\ttfamily\raggedright\arraybackslash}p{66mm}>{\raggedright\arraybackslash}X@{}}
-\toprule
-\thd{Situation} & \normalfont\thd{Command} & \thd{Output} \\
-\midrule
-Narrative                    & \textbackslash textcite\{lamport1994\}            & Lamport (1994) \\
-Parenthetical                & \textbackslash parencite\{lamport1994\}           & (Lamport, 1994) \\
-Two authors                  & \textbackslash parencite\{creswell2018\}          & (Creswell \& Creswell, 2018) \\
-Three or more authors        & \textbackslash textcite\{devlin2019\}             & Devlin et al.\ (2019) \\
-Multiple sources             & \textbackslash parencite\{lamport1994,knuth1984\} & (Knuth, 1984; Lamport, 1994) \\
-Page                         & \textbackslash parencite[p.\textasciitilde 18]\{lamport1994\} & (Lamport, 1994, p.~18) \\
-Page range                   & \textbackslash parencite[pp.\textasciitilde 3-{}-5]\{creswell2018\} & (Creswell \& Creswell, 2018, pp.~3--5) \\
-Same author, several years   & \textbackslash parencite\{smith2020,smith2023\}   & (Smith, 2020, 2023) \\
-Same author and year         & \textbackslash parencite\{brown2022a,brown2022b\} & (Brown, 2022a, 2022b) \\
-Group author                 & \textbackslash parencite\{apa2020\}               & First (American Psychological Association [APA], 2020); later (APA, 2020) \\
-Secondary source             & \textbackslash parencite[Bandura, 1977, as cited in][]\{smith2023\} & (Bandura, 1977, as cited in Smith, 2023) \\
-No author                    & \textbackslash parencite\{standards2024\}         & (``Template Standards,'' 2024) \\
-No date                      & \textbackslash parencite\{iucguide\}              & (Innovative University College, n.d.) \\
-\bottomrule
-\end{tabularx}
-\par\smallskip\raggedright\small\textit{Note.} The letters a and b, the
-abbreviation in brackets (from the entry's \texttt{shortauthor} field), and n.d.\
-are added automatically. Personal communications are typed directly in the text.
-\end{table}
-
-The template sets titles in sentence case, so put proper nouns and acronyms in
-braces, for example \texttt{\{Malaysian\}} or \texttt{\{BERT\}}, and group
-authors in double braces, for example
-\texttt{\{\{Ministry of Education Malaysia\}\}}. Check every exported entry
-against its source.
-
-\subsection{Working with AI tools}
-
-AI assistants can write and correct LaTeX. Table~\ref{tab:ai} compares three
-ways to use them.
-
-\begin{table}[htbp]
-\caption{AI tools for the template.}
-\label{tab:ai}
-\small
-\begin{tabularx}{\textwidth}{@{}p{26mm}XXp{15mm}@{}}
-\toprule
-\thd{Tool} & \thd{What the AI does} & \thd{What you do} & \thd{Builds PDF} \\
-\midrule
-Claude Code     & Edits the repository, builds and checks the PDF, saves the changes & Describe changes in plain words & Yes \\
-Claude Projects & Drafts LaTeX with the template and this manual as context          & Paste answers into your files    & No \\
-Any AI chat     & Answers one request at a time                                      & Paste text in; copy LaTeX out    & No \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-\textbf{Claude Code.} Open \texttt{claude.ai/code}, connect GitHub, start a
-session on your thesis repository, and describe the change. Ask Claude to commit
-and push the result.
-
-\begin{promptbox}{Example requests}
-Put my details in metadata.tex: title \ldots, name \ldots, matric number \ldots,
-Master of Business Administration, submitted March 2027.\par
-Add the attached survey results to Chapter 4 as a table captioned Respondent
-Demographics.\par
-Build the PDF and show me the contents page.
-\end{promptbox}
-
-\textbf{Claude Projects.} Create a project, add the repository under
-\textbf{Project knowledge}\then\ui{GitHub}, upload this manual, and paste these
-instructions. Click \ui{Sync} after changing files on GitHub.
-
-\begin{prompttext}
-I am writing an IUC thesis with the iucthesis LaTeX template in this project.
-- Follow the IUC Style Manual and the template README.
-- Use only \chapter, \section, and \subsection.
-- Tables: \caption above the table; \tablenote{} for notes.
-- Figures: \caption below the figure; \figuresource{} for the source.
-- Every numbered equation needs \eqtitle{Short title}.
-- Cite with \textcite{} or \parencite{} (APA 7); give BibTeX for new sources.
-- Return LaTeX that I can paste straight into my chapter files.
-\end{prompttext}
-
-\textbf{Any AI chat assistant.} Claude, ChatGPT, Gemini, and Copilot all help
-with single tasks. State that you use the IUC \emph{iucthesis} LaTeX template,
-then ask, for example, to convert Word text to LaTeX, turn data into a table
-with a caption and \cmd{tablenote}, create BibTeX entries with protected
-capitals, or explain a build error.
-
-\begin{warnbox}[Responsible use]
-Candidates are responsible for everything in their thesis. AI tools can invent
-sources, so verify every reference in the original publication or database.
-Follow your programme's rules on AI use, including any requirement to declare
-it. Do not give participant data, unpublished results, or personal information
-to AI tools unless your ethics approval allows it.
-\end{warnbox}
-
-\subsection{Building, checking, and troubleshooting}
-
-Page numbers, contents, lists, and cross-references update on the following
-build; \texttt{latexmk}, Overleaf, VS Code, and GitHub repeat builds as needed.
-Add \texttt{showframe} to line~1 of \file{main.tex} to draw the text area while
-checking margins, and remove it before submission. Build \file{spine.tex} for
-the binder's spine strip (Figure~\ref{fig:spine}).
-
-LaTeX stops at the first serious error and prints a message beginning with
-\texttt{!}. Table~\ref{tab:trouble} lists common causes.
-
-\begin{table}[htbp]
-\caption{Common error messages and their fixes.}
-\label{tab:trouble}
-\small
-\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{46mm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
-\toprule
-\thd{Message or symptom} & \thd{Usual cause} & \thd{Fix} \\
-\midrule
-\texttt{This class needs XeLaTeX} & pdfLaTeX selected & Select XeLaTeX \\
-\texttt{Missing \$ inserted} & \texttt{\_} or \texttt{\^{}} in normal text & Type \texttt{\textbackslash\_} or \texttt{\textbackslash\^{}\{\}} \\
-Rest of a line missing & \texttt{\%} begins a comment & Type \texttt{\textbackslash\%} \\
-\texttt{Missing \}} or \texttt{Runaway argument} & An unclosed \texttt{\{} & Close the brace \\
-\texttt{Undefined control sequence} & Misspelt command & Check the spelling after \texttt{\textbackslash} \\
-\texttt{Citation `\ldots' undefined} & Key not in \file{references.bib} & Check the key; build again \\
-\texttt{??} instead of a number & Not yet updated & Build again \\
-\texttt{\textbackslash subsubsection is not permitted} & A fourth heading level & Use \cmd{subsection} \\
-Title printed in lowercase & Unprotected capitals in \file{.bib} & Put the word in braces \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-Undo the most recent change and build again to isolate a problem. Report
-template faults on the template's GitHub page under \ui{Issues}.
 
 % ===========================================================================
 % Back cover
