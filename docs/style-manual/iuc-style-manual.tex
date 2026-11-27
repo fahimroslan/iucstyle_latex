@@ -127,6 +127,73 @@
   arc=4pt,left=8pt,right=8pt,top=6pt,bottom=6pt,fontupper=\sffamily\small,
   before upper={\cardhead{#1}\par\smallskip}}
 
+% ---------------------------------------------------------------------------
+% Infographic components (Sections 1-17)
+% ---------------------------------------------------------------------------
+\tcbset{igtile/.style={enhanced,colback=iuclav,colframe=iucpurple!12,boxrule=0.5pt,
+  arc=3pt,left=6pt,right=6pt,top=5pt,bottom=5pt,fontupper=\sffamily\small\raggedright}}
+% grid of tiles: \begin{infogrid}{columns} ... \end{infogrid}
+\newenvironment{infogrid}[1]
+  {\par\vspace{2pt}\begin{tcbraster}[raster columns=#1,raster equal height=rows,
+     raster column skip=6pt,raster row skip=6pt]}
+  {\end{tcbraster}\par\vspace{4pt}}
+% plain tile with a heading
+\newcommand\tile[2]{\begin{tcolorbox}[igtile]{\color{iucpurple}\bfseries #1}\par
+  \vspace{2pt}#2\end{tcolorbox}}
+% numbered tile
+\newcommand\igbadge[1]{\tikz[baseline=(b.base)]\node[circle,fill=iucpurple,text=white,
+  font=\sffamily\bfseries\scriptsize,inner sep=0pt,minimum size=1.45em](b){#1};}
+\newcommand\numtile[3]{\begin{tcolorbox}[igtile]\igbadge{#1}\hspace{5pt}%
+  {\color{iucpurple}\bfseries #2}\par\vspace{3pt}#3\end{tcolorbox}}
+% check tile
+\newcommand\checkicon{\tikz[baseline=-0.75ex]{\fill[iucteal] (0,0) circle (1.7mm);
+  \draw[white,line width=0.9pt,line cap=round,line join=round]
+    (-0.85mm,0) -- (-0.25mm,-0.6mm) -- (0.9mm,0.75mm);}}
+\newcommand\checktile[1]{\begin{tcolorbox}[igtile,colback=white,colframe=iucteal!35]%
+  \begin{tabular}{@{}p{4mm}@{\hspace{4pt}}>{\raggedright\arraybackslash}p{\dimexpr\linewidth-8mm}@{}}\checkicon & #1\end{tabular}%
+  \end{tcolorbox}}
+% key-value tile
+\newcommand\stat[2]{\begin{tcolorbox}[igtile,colback=white,colframe=iucpurple!30,
+  halign=center,top=6pt,bottom=6pt]{\color{iucpurple}\bfseries\large #1}\par
+  \vspace{2pt}{\scriptsize\color{iucgrey}#2}\end{tcolorbox}}
+% two panels side by side with coloured headings
+\newcommand\twopanel[4]{\begin{tcbraster}[raster columns=2,raster equal height,
+    raster column skip=8pt,raster before skip=4pt,raster after skip=6pt]
+  \begin{tcolorbox}[igtile,colback=iuctealbg,colframe=iucteal,title={\sffamily\bfseries #1},
+    colbacktitle=iucteal,coltitle=white,toptitle=2pt,bottomtitle=2pt]#2\end{tcolorbox}
+  \begin{tcolorbox}[igtile,colback=iuccream,colframe=iucrose,title={\sffamily\bfseries #3},
+    colbacktitle=iucrose,coltitle=white,toptitle=2pt,bottomtitle=2pt]#4\end{tcolorbox}
+  \end{tcbraster}}
+\newcommand\dodont[2]{\twopanel{DO}{#1}{AVOID}{#2}}
+\newenvironment{igitems}
+  {\begin{itemize}[leftmargin=1.1em,itemsep=2pt,topsep=0pt,parsep=0pt,
+     label={\color{iucpurple}\scriptsize$\blacktriangleright$}]}
+  {\end{itemize}}
+% chevron flow: \chevrons{count}{{Title/detail},...}
+\newcommand\chevrons[2]{\par\vspace{2pt}\noindent
+  \begin{tikzpicture}[x=1mm,y=1mm]
+  \pgfmathsetmacro\cw{155/#1}
+  \foreach \ct/\cd [count=\ci] in {#2} {
+    \pgfmathsetmacro\cx{(\ci-1)*\cw}
+    \ifodd\ci\def\cc{iucpurple}\else\def\cc{iucteal}\fi
+    \ifnum\ci=1
+      \fill[\cc] (\cx,0) -- ({\cx+\cw-3},0) -- ({\cx+\cw},-8) -- ({\cx+\cw-3},-16) -- (\cx,-16) -- cycle;
+    \else
+      \fill[\cc] ({\cx+0.6},0) -- ({\cx+\cw-3},0) -- ({\cx+\cw},-8) -- ({\cx+\cw-3},-16)
+        -- ({\cx+0.6},-16) -- ({\cx+3.6},-8) -- cycle;
+    \fi
+    \node[text=white,align=center,text width={(\cw-8)*1mm},inner sep=0pt]
+      at ({\cx+\cw/2+0.8},-8) {{\sffamily\bfseries\scriptsize\ct}\\[-1pt]{\sffamily\tiny\cd}};
+  }
+  \end{tikzpicture}\par\vspace{6pt}}
+% colour swatch tile for award colours
+\newcommand\swatch[3]{\begin{tcolorbox}[igtile,colback=white,colframe=iucpurple!25]%
+  \begin{tikzpicture}[x=1mm,y=1mm,baseline=(current bounding box.center)]
+    \fill[#1] (0,0) rectangle (16,-11);
+    \node[text=iucgold,font=\coverfont\bfseries\tiny] at (8,-5.5) {GOLD};
+  \end{tikzpicture}\hspace{6pt}%
+  \parbox[c]{\dimexpr\linewidth-22mm}{{\color{iucpurple}\bfseries #2}\\#3}\end{tcolorbox}}
+
 % Path cards and numbered steps (Section 18 infographics)
 \newtcolorbox{pathcard}[3]{enhanced,colback=white,colframe=#3,boxrule=0.8pt,arc=4pt,
   left=7pt,right=7pt,top=5pt,bottom=5pt,fontupper=\sffamily\small\raggedright,
@@ -240,49 +307,72 @@
 
 This manual is the institution-wide formatting standard for all Innovative
 University College (IUC) master's and doctoral theses, dissertations, and
-research projects. It applies to every study mode listed in Table~\ref{tab:words}.
+research projects, in every study mode listed in Table~\ref{tab:words}.
 
-This manual is the sole authority for manuscript formatting at IUC. Its rules
-apply across all faculties and programmes, and no separate formatting guide is
-required. APA 7th edition governs citations and references; the IUC rules in
-this manual govern how the manuscript is presented.
-
-IUC provides a LaTeX template that applies these rules automatically.
-Candidates who use it should keep its preset margins, headings, page
-numbering, and formatting. Section~\ref{sec:latex} explains how to obtain and use
-the template, including with GitHub and AI tools.
+\begin{infogrid}{3}
+\numtile{1}{Sole authority}{This manual governs manuscript formatting across all
+  faculties and programmes. No separate formatting guide is required.}
+\numtile{2}{APA 7th edition}{Governs citations and references. The IUC rules in
+  this manual govern how the manuscript is presented.}
+\numtile{3}{LaTeX template}{Applies these rules automatically. Keep its preset
+  margins, headings, page numbering, and formatting (Section~\ref{sec:latex}).}
+\end{infogrid}
 
 \subsubsection*{Reading the illustrations}
 
 Each page sample is a full A4 page produced by the template, reduced uniformly
-to 50\%. Fonts, line spacing, margins, and content positions scale together.
-Dashed lines mark the text area. Numbered notes sit outside the page, with
-arrows pointing to the matching feature; the arrows are annotations, not part
-of the manuscript. Print this manual at actual size (100\%) to preserve the
-stated scale. The template's sample manuscript shows the same pages at full
-size (Section~\ref{sec:latex}).
+to 50\%, so fonts, spacing, margins, and positions scale together. Print this
+manual at actual size (100\%) to preserve the scale. The legend below explains
+the marks used on every sample.
+
+\begin{center}
+\begin{tikzpicture}[x=1mm,y=1mm]
+  \fill[iuclav,rounded corners=3pt] (0,0) rectangle (155,-24);
+  % text area
+  \draw[iucpurple!70,dashed,line width=0.5pt] (5,-5) rectangle (17,-19);
+  \node[anchor=west,font=\sffamily\scriptsize,text width=19mm] at (19,-12)
+    {\textbf{Dashed line}\\text area};
+  % note number
+  \node[circle,fill=iucpurple,text=white,font=\sffamily\bfseries\scriptsize,
+    inner sep=0pt,minimum size=4mm] at (47,-12) {1};
+  \node[anchor=west,font=\sffamily\scriptsize,text width=19mm] at (51,-12)
+    {\textbf{Note}\\explained beside the page};
+  % arrow
+  \draw[iucpurple,line width=0.5pt,-{Stealth[length=2mm]}] (75,-15) -- (85,-9);
+  \node[anchor=west,font=\sffamily\scriptsize,text width=19mm] at (87,-12)
+    {\textbf{Arrow}\\points to the feature};
+  % dimension
+  \draw[dim] (113,-5) -- node[dimlab,rotate=90]{30 mm} (113,-19);
+  \node[anchor=west,font=\sffamily\scriptsize,text width=19mm] at (117,-12)
+    {\textbf{Dimension}\\full-size value};
+  \node[anchor=east,font=\sffamily\bfseries\scriptsize,text=iucpurple] at (153.5,-21.5) {50\% SCALE};
+\end{tikzpicture}
+\end{center}
+
+Arrows and notes are annotations, not part of the manuscript. The template's
+sample manuscript shows the same pages at full size (Section~\ref{sec:latex}).
 
 \subsection{Candidate responsibility}
 
 The template sets the layout. Candidates remain responsible for accuracy,
-academic quality, and the following checks:
+academic quality, and these checks:
 
-\begin{itemize}
-  \item personal, programme, degree, and submission details;
-  \item the approved thesis or dissertation title;
-  \item the compulsory minimum word count, and concise abstracts;
-  \item the required citation and reference style;
-  \item permission to use copyrighted material, where necessary;
-  \item every table, figure, equation, citation, and appendix;
-  \item the printing, binding, and PDF-submission rules in this manual; and
-  \item every page of the final PDF.
-\end{itemize}
+\begin{infogrid}{2}
+\checktile{Personal, programme, degree, and submission details}
+\checktile{The approved thesis or dissertation title}
+\checktile{The compulsory minimum word count, and concise abstracts}
+\checktile{The required citation and reference style}
+\checktile{Permission to use copyrighted material, where necessary}
+\checktile{Every table, figure, equation, citation, and appendix}
+\checktile{The printing, binding, and PDF-submission rules in this manual}
+\checktile{Every page of the final PDF}
+\end{infogrid}
 
 % ===========================================================================
 \section{Template specifications at a glance}
 % ===========================================================================
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \begin{tcbraster}[raster columns=2,raster equal height=rows,raster column skip=9pt,
   raster row skip=9pt]
 \begin{card}{Manuscript and paper}
@@ -315,8 +405,11 @@ academic quality, and the following checks:
 \label{fig:glance}
 \end{figure}
 
-\textbf{Paper size.} Use A4 (210~$\times$~297~mm) for the manuscript and the
-final PDF. Print at actual size, without scaling.
+\begin{infogrid}{3}
+\stat{A4}{210 $\times$ 297 mm, for the manuscript and the final PDF}
+\stat{100\%}{Print at actual size, without scaling}
+\stat{1 PDF}{Matches the printed copies (Section~17)}
+\end{infogrid}
 
 % ===========================================================================
 \section{Word-count requirements}\label{sec:words}
@@ -326,7 +419,7 @@ The minimum word counts in Table~\ref{tab:words} are compulsory. The advisory
 maximums are for planning only: there is no fixed upper limit, and no exemption
 is needed to exceed them.
 
-\begin{table}[htbp]
+\begin{table}[H]
 \caption{Institution-wide minimum and advisory word counts.}
 \label{tab:words}
 \small
@@ -345,22 +438,53 @@ PhD      & Full Research                 & 70,000 & 100,000 \\
 study mode, regardless of programme or discipline.
 \end{table}
 
+\begin{center}
+\begin{tikzpicture}[x=1mm,y=1mm]
+  \def\sc{0.88}% mm per 1,000 words
+  \foreach \lab/\mn/\mx [count=\i] in {
+      {Master: Coursework + Research Project}/10/30,
+      {Master: Mixed Mode}/25/50,
+      {Master: Full Research}/40/60,
+      {Doctoral: Coursework + Dissertation}/40/60,
+      {PhD: Full Research}/70/100} {
+    \pgfmathsetmacro\y{-(\i-1)*9}
+    \node[anchor=east,font=\sffamily\scriptsize,text width=50mm,align=right] at (52,\y) {\lab};
+    \fill[iucpurple!22] (55,\y+2.6) rectangle ({55+\mx*\sc},\y-2.6);
+    \fill[iucpurple] (55,\y+2.6) rectangle ({55+\mn*\sc},\y-2.6);
+    \node[anchor=west,font=\sffamily\bfseries\tiny,text=white] at (55.5,\y) {\mn k};
+    \node[anchor=west,font=\sffamily\tiny,text=iucgrey] at ({55.5+\mx*\sc},\y) {\mx k};
+  }
+  \fill[iucpurple] (55,-44) rectangle (59,-47);
+  \node[anchor=west,font=\sffamily\scriptsize] at (60,-45.5) {Compulsory minimum};
+  \fill[iucpurple!22] (95,-44) rectangle (99,-47);
+  \node[anchor=west,font=\sffamily\scriptsize] at (100,-45.5) {Advisory maximum (planning only)};
+\end{tikzpicture}
+\end{center}
+
 \subsection{Counting scope}
 
-Count the chapter body text from the first chapter to the last, including
-headings and quotations. Exclude the front matter, abstracts, table and figure
-content, captions, references, and appendices.
+\twopanel{COUNT}{\begin{igitems}
+  \item Chapter body text, from the first chapter to the last
+  \item Headings
+  \item Quotations
+\end{igitems}}{EXCLUDE}{\begin{igitems}
+  \item Front matter and abstracts
+  \item Table and figure content, and captions
+  \item References and appendices
+\end{igitems}}
 
 The LaTeX template does not count words or enforce limits.
 
 \subsection{Abstracts and final verification}
 
-Neither the English abstract nor the Malay \emph{Abstrak} has a fixed word
-limit. Each must concisely state the objectives, methods, findings, and
-conclusion. Keywords below each abstract are optional.
-
-Before submission, check that the chapter body text meets the compulsory
-minimum for the study mode. Exceeding the advisory maximum is permitted.
+\begin{infogrid}{3}
+\tile{No fixed limit}{Neither the English abstract nor the Malay \emph{Abstrak}
+  has a fixed word limit. Keywords below each are optional.}
+\tile{Concise content}{Each abstract states the objectives, methods, findings,
+  and conclusion.}
+\tile{Before submission}{Check that the chapter body text meets the compulsory
+  minimum. Exceeding the advisory maximum is permitted.}
+\end{infogrid}
 
 % ===========================================================================
 \section{Required order of the manuscript}
@@ -368,7 +492,7 @@ minimum for the study mode. Exceeding the advisory maximum is permitted.
 
 Arrange the manuscript in the order shown in Figure~\ref{fig:order}.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm,
   lab/.style={anchor=north west,font=\sffamily\bfseries\color{iucpurple},align=left,text width=26mm},
@@ -376,7 +500,6 @@ Arrange the manuscript in the order shown in Figure~\ref{fig:order}.
   num/.style={anchor=west,font=\sffamily\bfseries\small\color{iucdeep}},
   item/.style={anchor=west,font=\sffamily\small,align=left},
   arr/.style={-{Stealth[length=1.6mm]},draw=iucteal,line width=0.5pt}]
-  % Cover pages
   \fill[iuclav,rounded corners=3pt] (0,0) rectangle (155,-24);
   \fill[iuctealbg,rounded corners=3pt] (0,0) rectangle (32,-24);
   \fill[iuctealbg] (28,0) rectangle (32,-24);
@@ -384,7 +507,6 @@ Arrange the manuscript in the order shown in Figure~\ref{fig:order}.
   \node[num] at (36,-7) {01}; \node[item] at (44,-7) {\textbf{Outer cover}: no visible page number};
   \node[num] at (36,-17) {02}; \node[item] at (44,-17) {\textbf{Internal title page}: Roman i counted, number hidden};
   \draw[arr] (16,-24) -- (16,-29);
-  % Front matter
   \fill[iuclav,rounded corners=3pt] (0,-29) rectangle (155,-92);
   \fill[iuctealbg,rounded corners=3pt] (0,-29) rectangle (32,-92);
   \fill[iuctealbg] (28,-29) rectangle (32,-92);
@@ -395,7 +517,6 @@ Arrange the manuscript in the order shown in Figure~\ref{fig:order}.
       08/List of tables,09/List of figures,10/List of equations,11/List of appendices}
     { \node[num] at (36,-29-\k*6.6) {\n}; \node[item] at (44,-29-\k*6.6) {\t}; }
   \draw[arr] (16,-92) -- (16,-97);
-  % Main text
   \fill[iuclav,rounded corners=3pt] (0,-97) rectangle (155,-128);
   \fill[iuctealbg,rounded corners=3pt] (0,-97) rectangle (32,-128);
   \fill[iuctealbg] (28,-97) rectangle (32,-128);
@@ -408,10 +529,12 @@ Arrange the manuscript in the order shown in Figure~\ref{fig:order}.
 \label{fig:order}
 \end{figure}
 
-Keep this order. Omit any list that has no entries. A dedication is optional
-and follows the acknowledgement; a list of abbreviations and a glossary may
-follow the list of appendices when needed. Use the same front-matter format and
-Roman pagination for these pages.
+\begin{infogrid}{3}
+\tile{Keep this order}{Omit any list that has no entries.}
+\tile{Optional: dedication}{Follows the acknowledgement.}
+\tile{Optional: abbreviations, glossary}{Follow the list of appendices, with the
+  same front-matter format and Roman pagination.}
+\end{infogrid}
 
 % ===========================================================================
 \section{Cover and title-page information}
@@ -420,46 +543,55 @@ Roman pagination for these pages.
 Check these details against your official registration and approved research
 records:
 
-\begin{itemize}
-  \item the complete, approved thesis or dissertation title;
-  \item the candidate's full registered name;
-  \item the name of the institution;
-  \item the department, faculty, or academic unit, if included;
-  \item the complete name of the degree;
-  \item the month and year of submission;
-  \item the declaration date;
-  \item the matriculation or candidate number; and
-  \item the candidate's address on the declaration page.
-\end{itemize}
+\begin{infogrid}{3}
+\checktile{Complete, approved thesis or dissertation title}
+\checktile{Candidate's full registered name}
+\checktile{Name of the institution}
+\checktile{Department, faculty, or academic unit, if included}
+\checktile{Complete name of the degree}
+\checktile{Month and year of submission}
+\checktile{Declaration date}
+\checktile{Matriculation or candidate number}
+\checktile{Candidate's address on the declaration page}
+\end{infogrid}
 
 \textbf{Page samples.} Each A4 page is shown at 105~$\times$~148.5~mm (50\%).
-Dimension labels show full-size millimetres. Page numbers and contents entries
-come from the same compiled sample manuscript. Annotation text is enlarged for
+Dimension labels show full-size millimetres; annotation text is enlarged for
 readability.
 
 \subsection{Outer cover}
 
 The outer cover shows the title, the registered candidate name, and the
-institution name, in \textbf{18-point Arial Narrow, bold uppercase,
-single-spaced, with gold hot stamping}. Centre the title at the top, the name
-in the middle, and the institution near the bottom. Break long titles into
-balanced lines, and keep each name on one line where possible.
+institution name. Centre the title at the top, the name in the middle, and the
+institution near the bottom. Break long titles into balanced lines, and keep
+each name on one line where possible.
 
-The cover uses special margins: 60~mm at the top, 40~mm at the bottom, 40~mm on
-the left, and 25~mm on the right. No page number is shown.
+\begin{infogrid}{4}
+\stat{18 pt}{Arial Narrow}
+\stat{BOLD CAPS}{Single-spaced}
+\stat{Gold}{Hot stamping}
+\stat{None}{Page number}
+\end{infogrid}
+\begin{infogrid}{4}
+\stat{60 mm}{Top margin}
+\stat{40 mm}{Bottom margin}
+\stat{40 mm}{Left margin}
+\stat{25 mm}{Right margin}
+\end{infogrid}
 
-The final hardbound cover and spine are colour-coded by award level:
+The final hardbound cover and spine are colour-coded by award level. Use the
+colour for the front cover, back cover, and spine, and keep the gold lettering
+clear, durable, and consistent.
 
-\begin{itemize}
-  \item \textbf{Doctoral level (PhD and professional doctorates):} black
-        hardbound cover and spine with gold lettering.
-  \item \textbf{Master's level (all study modes):} purple hardbound cover and
-        spine with gold lettering.
-\end{itemize}
+\begin{infogrid}{2}
+\swatch{black}{Doctoral level}{PhD and professional doctorates: black cover and
+  spine, gold lettering.}
+\swatch{iucpurple}{Master's level}{All study modes: purple cover and spine, gold
+  lettering.}
+\end{infogrid}
 
-Use the specified colour for the front cover, back cover, and spine. Keep the
-gold lettering clear, durable, and consistent. The illustration uses sample
-details; the cover page in the submitted PDF is white with black lettering.
+The illustration uses sample details; the cover page in the submitted PDF is
+white with black lettering.
 
 \begin{figure}[H]
 \panelhead{Outer cover}{Format notes}
@@ -496,15 +628,19 @@ details; the cover page in the submitted PDF is white with black lettering.
 
 \subsubsection*{Hardbound spine information}
 
-Leave \textbf{60~mm clear at each end of the spine}. Set the registered name
-vertically on one line, followed by the degree abbreviation and the submission
-year. Use the abbreviation of the registered award, such as MBA, MSc, PhD, or
-DBA; split a long award name across tightly stacked lines. Start the name at
-the upper printable boundary and end the year at the lower boundary.
+\chevrons{4}{{Clear zone/60 mm unprinted},{Registered name/from the upper boundary},
+  {Degree abbreviation/MBA, MSc, PhD, DBA},{Submission year/ends at the lower boundary}}
 
-Use \textbf{16-point Arial Narrow, bold uppercase, with gold hot stamping},
-reading from top to bottom. Centre the lettering within the spine width
-confirmed by the binder. Match all details to the title page and official
+\begin{infogrid}{4}
+\stat{16 pt}{Arial Narrow, bold uppercase}
+\stat{Gold}{Hot stamping}
+\stat{Top \textrightarrow{} bottom}{Reading direction}
+\stat{Binder}{Confirms the spine width}
+\end{infogrid}
+
+Leave 60~mm clear at each end of the spine. Set the name vertically on one line;
+split a long award name across tightly stacked lines. Centre the lettering
+within the spine width, and match all details to the title page and official
 records. The illustration uses a sample name and year.
 
 \begin{figure}[H]
@@ -542,26 +678,24 @@ records. The illustration uses a sample name and year.
 
 \subsection{Internal title page}
 
-The internal title page contains:
+The internal title page contains six elements, from top to bottom, in Times New
+Roman:
 
-\begin{enumerate}
-  \item the approved thesis or dissertation title;
-  \item the candidate's name;
-  \item the statement that the work is submitted in partial fulfilment of the degree;
-  \item the full degree title;
-  \item the institution name; and
-  \item the month and year of submission.
-\end{enumerate}
+\begin{infogrid}{3}
+\numtile{1}{Title}{14~pt, bold uppercase, single-spaced; approved wording.}
+\numtile{2}{Candidate's name}{12~pt regular; each word capitalised.}
+\numtile{3}{Submission statement}{12~pt sentence case: submitted in partial
+  fulfilment of the degree.}
+\numtile{4}{Full degree title}{12~pt, bold uppercase.}
+\numtile{5}{Institution name}{12~pt, regular uppercase.}
+\numtile{6}{Month and year}{12~pt sentence case.}
+\end{infogrid}
 
-Set the title in 14-point Times New Roman, bold uppercase and single-spaced.
-Set the rest in 12-point Times New Roman: the name in regular type with each
-word capitalised; the submission statement and date in sentence case; the degree
-in bold uppercase; and the institution in regular uppercase. Use the
-outer-cover margins. The title page counts as Roman page~i, but the number is
-not shown.
-
-Break long titles into balanced, single-spaced lines. Keep the approved wording
-and abbreviations, and match the title and name to the outer cover.
+\begin{infogrid}{3}
+\stat{60/40/40/25}{Outer-cover margins in mm: top, bottom, left, right}
+\stat{Roman i}{Counted, but the number is not shown}
+\stat{Balanced}{Break long titles into single-spaced lines; match the outer cover}
+\end{infogrid}
 
 \begin{figure}[H]
 \panelhead{Internal title page}{Format notes}
@@ -586,18 +720,18 @@ and abbreviations, and match the title and name to the outer cover.
 \section{Front matter}
 % ===========================================================================
 
-Start each front-matter component on a new page. Use 12-point Times New Roman
-with centred, bold uppercase headings. Unless stated otherwise, use regular,
-sentence-case, justified, single-spaced text.
+\begin{infogrid}{4}
+\stat{New page}{for each front-matter component}
+\stat{12 pt}{Times New Roman}
+\stat{CENTRED}{Bold uppercase headings}
+\stat{Single}{Spacing; regular, sentence-case, justified text}
+\end{infogrid}
 
 \subsection{Author declaration}
 
 The declaration confirms that the work is the candidate's own and that all
-sources are acknowledged.
-
-Use the front-matter format. Place the date on the left, and the signature,
-name, matriculation number, and address on the right. Use the exact declaration
-shown below and complete all details.
+sources are acknowledged. Use the exact wording shown below, with the date on
+the left and the signature, name, matriculation number, and address on the right.
 
 \begin{figure}[H]
 \panelhead{Author declaration}{Format notes}
@@ -619,12 +753,13 @@ shown below and complete all details.
 
 \subsection{Acknowledgement}
 
-Briefly acknowledge academic, financial, technical, and personal support in a
-formal tone. Include funders, research sites, and specialist contributors where
-applicable.
-
-Write in paragraphs using 12-point Times New Roman, sentence case, justified
-alignment, and single spacing.
+\begin{infogrid}{2}
+\tile{What to acknowledge}{Academic, financial, technical, and personal support,
+  briefly and in a formal tone, including funders, research sites, and specialist
+  contributors.}
+\tile{How to write it}{Paragraphs in 12-point Times New Roman, sentence case,
+  justified alignment, and single spacing.}
+\end{infogrid}
 
 \begin{figure}[H]
 \panelhead{Acknowledgement}{Format notes}
@@ -644,22 +779,18 @@ alignment, and single spacing.
 
 \subsection{Malay abstract: \emph{Abstrak}}
 
-Place the Malay abstract before the English version. Both must report the same
-study, findings, and conclusions, with matching terms, names, abbreviations,
-and numbers.
+Place the Malay abstract before the English version. Each abstract must
+summarise these five elements, in order:
 
-Each abstract must summarise:
+\chevrons{5}{{Context/the research problem},{Objectives/of the study},
+  {Method/or research design},{Findings/the main results},{Conclusion/or contribution}}
 
-\begin{itemize}
-  \item the research context or problem;
-  \item the study objectives;
-  \item the method or research design;
-  \item the main findings; and
-  \item the main conclusion or contribution.
-\end{itemize}
-
-There is no fixed word limit for either abstract, and keywords are optional.
-Ensure that both language versions are accurate.
+\begin{infogrid}{3}
+\tile{Same study}{Both versions report the same findings and conclusions, with
+  matching terms, names, abbreviations, and numbers.}
+\tile{No fixed limit}{There is no fixed word limit; keywords are optional.}
+\tile{Accuracy}{Ensure that both language versions are accurate.}
+\end{infogrid}
 
 \begin{figure}[H]
 \panelhead{Abstrak}{Format notes}
@@ -679,13 +810,18 @@ Ensure that both language versions are accurate.
 
 \subsection{English abstract}
 
-The English abstract follows the Malay version. Summarise the research clearly,
-without adding claims that are absent from the thesis. Avoid citations unless
-they are required.
+The English abstract follows the Malay version.
 
-Use few abbreviations, and define each at first use. Check both abstracts side
-by side for consistency. Keep the abstract concise; optional keywords appear
-below it.
+\dodont{\begin{igitems}
+  \item Summarise the research clearly
+  \item Define each abbreviation at first use
+  \item Check both abstracts side by side
+  \item Keep it concise; optional keywords go below
+\end{igitems}}{\begin{igitems}
+  \item Claims absent from the thesis
+  \item Citations, unless required
+  \item Many abbreviations
+\end{igitems}}
 
 \begin{figure}[H]
 \panelhead{Abstract}{Format notes}
@@ -705,13 +841,16 @@ below it.
 
 \subsection{Table of contents}
 
-List the front matter, chapters, sections, references, and appendices.
-Subsections and lower headings are not listed.
+\twopanel{LIST}{\begin{igitems}
+  \item Front matter, with page numbers
+  \item Chapters, as \texttt{CHAPTER 1: INTRODUCTION}, without page numbers
+  \item Sections, references, and appendices, with page numbers
+\end{igitems}}{OMIT}{\begin{igitems}
+  \item Subsections and lower headings
+  \item Hand-edited entries: the template generates them
+\end{igitems}}
 
-Use chapter entries such as \texttt{CHAPTER 1: INTRODUCTION}. Main chapter
-headings have no page number in the contents; all other entries show one. The
-template generates the entries, so do not edit them by hand. Use single spacing,
-and match every title exactly to the manuscript.
+Use single spacing, and match every title exactly to the manuscript.
 
 \begin{figure}[H]
 \panelhead{Table of contents}{Format notes}
@@ -734,9 +873,12 @@ and match every title exactly to the manuscript.
 
 \subsection{Lists of tables, figures, equations, and appendices}
 
-Start each list on a new page. Use single spacing, and match the numbers and
-captions or titles to the manuscript. Omit a list when the manuscript has no
-corresponding items.
+\begin{infogrid}{4}
+\stat{New page}{for each list}
+\stat{Single}{spacing}
+\stat{Match}{numbers and captions or titles to the manuscript}
+\stat{Omit}{a list with no entries}
+\end{infogrid}
 
 \keepwithsample
 \textbf{List of tables.} Include every numbered table, with its caption and
@@ -832,33 +974,25 @@ page number.
 % ===========================================================================
 
 Start the main text at Arabic page~1, and start each chapter on a new page. The
-template provides five chapters:
+template provides five chapters, a flexible default for all study modes:
 
-\begin{enumerate}
-  \item Introduction
-  \item Literature Review
-  \item Methodology
-  \item Data Analysis
-  \item Discussion and Conclusion
-\end{enumerate}
+\chevrons{5}{{Chapter 1/Introduction},{Chapter 2/Literature Review},
+  {Chapter 3/Methodology},{Chapter 4/Data Analysis},{Chapter 5/Discussion and Conclusion}}
 
-This five-chapter structure is a flexible default for all study modes. Combine
-or split chapters to suit the research, while covering the elements below.
+Combine or split chapters to suit the research, while arranging them logically
+to explain:
 
-Arrange the chapters logically to explain:
-
-\begin{itemize}
-  \item the research problem and its significance;
-  \item the objectives, questions, or hypotheses;
-  \item the relevant scholarly context;
-  \item the method used to conduct the study;
-  \item the evidence or results obtained;
-  \item the interpretation of those results; and
-  \item the study's conclusions, limitations, implications, and recommendations.
-\end{itemize}
-
-Use short, descriptive chapter titles. A chapter may begin with a brief
-introduction or proceed directly to its first section.
+\begin{infogrid}{4}
+\numtile{1}{Problem}{The research problem and its significance}
+\numtile{2}{Aims}{The objectives, questions, or hypotheses}
+\numtile{3}{Context}{The relevant scholarly context}
+\numtile{4}{Method}{The method used to conduct the study}
+\numtile{5}{Evidence}{The evidence or results obtained}
+\numtile{6}{Interpretation}{The interpretation of those results}
+\numtile{7}{Conclusions}{Conclusions, limitations, implications, and recommendations}
+\tile{Chapter titles}{Short and descriptive. A chapter may open with a brief
+  introduction or go straight to its first section.}
+\end{infogrid}
 
 \begin{figure}[H]
 \panelhead{Chapter opening}{Format notes}
@@ -912,7 +1046,7 @@ content within the text area.
 Figure~\ref{fig:margins} compares the standard and chapter-opening margins.
 Only the top margin changes.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm]
   \foreach \x/\lab/\top in {0/Standard page/7.5,82/Chapter opening/10} {
@@ -934,48 +1068,61 @@ Only the top margin changes.
 \label{fig:margins}
 \end{figure}
 
-The wider left margin allows for binding. Chapter openings use a 40~mm top
-margin; all other margins stay unchanged.
-
-Keep all content within the permitted page area. Resize, rotate, split, or move
-oversized material to an appendix.
+\begin{infogrid}{2}
+\tile{Wider left margin}{38~mm, to allow for binding. Chapter openings use a
+  40~mm top margin; all other margins stay unchanged.}
+\tile{Oversized material}{Keep all content within the page area: resize, rotate,
+  split, or move it to an appendix.}
+\end{infogrid}
 
 \subsection{Line spacing}
 
-Double-space chapter text, block quotations, appendix prose, and references.
-Single-space the front matter, tables, captions, and figure or table notes. In
-references, use a 1.27~cm hanging indent and no extra space between entries.
+\twopanel{DOUBLE-SPACED}{\begin{igitems}
+  \item Chapter text
+  \item Block quotations
+  \item Appendix prose
+  \item References: 1.27~cm hanging indent, no extra space between entries
+\end{igitems}}{SINGLE-SPACED}{\begin{igitems}
+  \item Front matter
+  \item Tables
+  \item Captions
+  \item Figure and table notes
+\end{igitems}}
 
 Keep spacing consistent. Do not add repeated blank lines to position content.
 
 \subsection{Paragraphs}
 
-Indent the first line of each body paragraph by 2~em, and leave 6~pt after each
-paragraph. Use justified alignment. Do not add blank paragraphs.
+\begin{infogrid}{3}
+\stat{2 em}{First-line indent for body paragraphs}
+\stat{6 pt}{Space after each paragraph}
+\stat{Justified}{Alignment}
+\end{infogrid}
 
-Use one-sentence paragraphs only when needed. Do not indent headings, captions,
-displayed equations, or specially formatted material.
+\dodont{\begin{igitems}
+  \item Use one-sentence paragraphs only when needed
+\end{igitems}}{\begin{igitems}
+  \item Blank paragraphs
+  \item Indenting headings, captions, displayed equations, or specially formatted material
+\end{igitems}}
 
 % ===========================================================================
 \section{Page numbering and running elements}
 % ===========================================================================
 
-Centre page numbers at the bottom of the page. Do not add running titles,
-author names, decorative headers, or horizontal rules.
+Centre page numbers at the bottom of the page. Pagination runs as follows:
 
-Pagination follows these rules:
+\chevrons{6}{{Outer cover/no visible number},{Title page/Roman i, hidden},
+  {Declaration/Roman ii},{Front matter/Roman continues},{Chapter 1/Arabic 1},
+  {References, appendices/Arabic continues}}
 
-\begin{itemize}
-  \item the outer cover has no visible number;
-  \item the internal title page is Roman page~i, with the number hidden;
-  \item the author declaration begins on Roman page~ii;
-  \item Roman numbering continues through all remaining front matter;
-  \item Arabic numbering begins at 1 on the first page of the first chapter; and
-  \item Arabic numbering continues through the references and appendices.
-\end{itemize}
-
-Account for every page. Recheck the numbering after edits, especially around the
-title page, contents, references, landscape pages, and appendices.
+\twopanel{ACCOUNT FOR EVERY PAGE}{Recheck the numbering after edits, especially
+  around the title page, contents, references, landscape pages, and
+  appendices.}{DO NOT ADD}{\begin{igitems}
+  \item Running titles or author names
+  \item Decorative headers
+  \item Horizontal rules
+\end{igitems}}
 
 % ===========================================================================
 \section{Typography and headings}
@@ -983,20 +1130,34 @@ title page, contents, references, landscape pages, and appendices.
 
 \subsection{Body text}
 
-Use 12-point Times New Roman for body text, front matter, and headings. The
-internal title is 14~pt. Use Arial Narrow for the outer cover (18~pt) and the
-spine (16~pt). Body text is black; figures and tables may use colour when it
-improves clarity.
+\begin{center}
+\begin{tikzpicture}[x=1mm,y=1mm]
+  \fill[iuclav,rounded corners=3pt] (0,0) rectangle (155,-58);
+  \foreach \y/\fnt/\sz/\sample/\use in {
+      -9/\coverfont\bfseries/18/OUTER COVER/{Arial Narrow 18 pt, bold uppercase},
+      -22/\coverfont\bfseries/16/SPINE LETTERING/{Arial Narrow 16 pt, bold uppercase},
+      -35/\tnr\bfseries/14/INTERNAL TITLE/{Times New Roman 14 pt, bold uppercase},
+      -48/\tnr/12/{Body text, front matter, and headings}/{Times New Roman 12 pt}} {
+    \node[anchor=west,font=\fnt\fontsize{\sz}{\sz}\selectfont,text=iucdeep] at (5,\y) {\sample};
+    \node[anchor=east,font=\sffamily\scriptsize,text=iucgrey] at (150,\y) {\use};
+    \draw[iucpurple!20] (5,\y-6.5) -- (150,\y-6.5);
+  }
+\end{tikzpicture}
+\end{center}
 
-Keep the preset fonts, sizes, and spacing. Use bold and italics sparingly and
-consistently.
+\begin{infogrid}{3}
+\tile{Colour}{Body text is black. Figures and tables may use colour when it
+  improves clarity.}
+\tile{Preset styles}{Keep the preset fonts, sizes, and spacing.}
+\tile{Emphasis}{Use bold and italics sparingly and consistently.}
+\end{infogrid}
 
 \subsection{Heading hierarchy}
 
 Figure~\ref{fig:headings} shows the heading levels. Its stepped layout shows the
 hierarchy only, not indentation in the manuscript.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{tikzpicture}[x=1mm,y=1mm,
   arr/.style={-{Stealth[length=1.6mm]},draw=iucteal,line width=0.5pt}]
@@ -1019,42 +1180,60 @@ hierarchy only, not indentation in the manuscript.
 \label{fig:headings}
 \end{figure}
 
-Chapter, section, and subsection headings are bold and 12-point. Chapter headings
-are uppercase and centred; sections and subsections are left aligned.
+All headings are bold and 12-point. Use chapters, sections, and subsections only.
+The spacing around headings is:
 
-Use chapters, sections, and subsections only. Keep chapter titles uppercase, and
-use title case for section and subsection headings. Set section and subsection
-spacing to 24~pt before and 12~pt after. Leave 12~pt between the chapter
-identifier and the chapter title, and 24~pt after the title.
+\begin{center}
+\begin{tikzpicture}[x=1mm,y=1mm,
+  sp/.style={{Stealth[length=1.3mm]}-{Stealth[length=1.3mm]},iucbrown,line width=0.4pt},
+  splab/.style={anchor=west,font=\sffamily\scriptsize,text=iucgrey}]
+  \fill[iuclav,rounded corners=3pt] (0,0) rectangle (74,-62);
+  \node[font=\sffamily\bfseries\small,text=iucpurple] at (37,4) {CHAPTER OPENING};
+  \node[font=\tnr\bfseries\small] (cid) at (30,-8) {CHAPTER 1};
+  \node[font=\tnr\bfseries\small] (ctt) at (30,-20) {INTRODUCTION};
+  \draw[sp] (56,-10) -- node[splab,right]{12 pt} (56,-17.5);
+  \draw[sp] (56,-22.5) -- node[splab,right]{24 pt} (56,-34);
+  \node[anchor=west,font=\tnr\bfseries\small] at (6,-38) {1.1\quad Purpose};
+  \foreach \y in {-46,-50,-54} \fill[iucpurple!25] (6,\y) rectangle (52,\y-1.3);
+  \fill[iuclav,rounded corners=3pt] (81,0) rectangle (155,-62);
+  \node[font=\sffamily\bfseries\small,text=iucpurple] at (118,4) {SECTION AND SUBSECTION};
+  \foreach \y in {-6,-10} \fill[iucpurple!25] (87,\y) rectangle (135,\y-1.3);
+  \node[anchor=west,font=\tnr\bfseries\small] at (87,-30) {1.2\quad Research Structure};
+  \draw[sp] (140,-12) -- node[splab,right]{24 pt} (140,-27.5);
+  \draw[sp] (140,-32.5) -- node[splab,right]{12 pt} (140,-43.5);
+  \foreach \y in {-45,-49,-53} \fill[iucpurple!25] (87,\y) rectangle (135,\y-1.3);
+\end{tikzpicture}
+\end{center}
 
 \subsection{Capitalization and numbering}
 
-Use uppercase chapter titles and title case for sections and subsections. Let
-the template number headings consecutively. Match headings to the contents
-entries, and do not end headings with a full stop.
+\dodont{\begin{igitems}
+  \item Uppercase chapter titles
+  \item Title case for sections and subsections
+  \item Let the template number headings consecutively
+  \item Match headings to the contents entries
+\end{igitems}}{\begin{igitems}
+  \item Headings ending with a full stop
+  \item Manual heading numbers
+\end{igitems}}
 
 % ===========================================================================
 \section{Language and academic writing}
 % ===========================================================================
 
-Use clear, formal, grammatical language. Keep terminology, spelling,
-capitalization, abbreviations, symbols, and units consistent.
+Use clear, formal, grammatical language, and keep terminology, spelling,
+capitalization, abbreviations, symbols, and units consistent. Candidates should:
 
-Candidates should:
-
-\begin{itemize}
-  \item define specialist terms and uncommon abbreviations at first use;
-  \item use one consistent variety of English unless another language is approved;
-  \item keep names of variables, constructs, categories, and research
-        instruments consistent;
-  \item distinguish clearly between their own findings and claims from previous
-        literature;
-  \item avoid unsupported generalizations and informal expressions;
-  \item present numbers, dates, percentages, and units consistently; and
-  \item proofread both the text and the visual material after final pagination.
-\end{itemize}
-
-Check word counts using Section~\ref{sec:words}.
+\begin{infogrid}{2}
+\checktile{Define specialist terms and uncommon abbreviations at first use}
+\checktile{Use one variety of English unless another language is approved}
+\checktile{Keep names of variables, constructs, categories, and instruments consistent}
+\checktile{Separate their own findings clearly from claims in previous literature}
+\checktile{Avoid unsupported generalizations and informal expressions}
+\checktile{Present numbers, dates, percentages, and units consistently}
+\checktile{Proofread text and visual material after final pagination}
+\checktile{Check word counts using Section~\ref{sec:words}}
+\end{infogrid}
 
 % ===========================================================================
 \section{Tables}
@@ -1065,31 +1244,30 @@ discuss each table in the text.
 
 \subsection{Numbering and captions}
 
-Number tables by chapter (for example, Table~4.1), and place the number and
-caption above the table.
-
-Write short, descriptive captions with consistent capitalization and
-punctuation. Do not simply repeat the section heading.
-
-Single-space captions, headings, data, and notes. Do not add blank lines or extra
-spacing in rows or cells. Keep the surrounding body text double-spaced.
+\begin{infogrid}{3}
+\numtile{1}{By chapter}{Number tables by chapter, for example Table~4.1.}
+\numtile{2}{Caption above}{Short and descriptive, with consistent capitalization
+  and punctuation; not a repeat of the section heading.}
+\numtile{3}{Single-spaced}{Captions, headings, data, and notes, with no blank
+  lines in rows or cells. Surrounding text stays double-spaced.}
+\end{infogrid}
 
 \subsection{Table design}
 
-\begin{itemize}
-  \item Use clear column headings, and include units where relevant.
-  \item Single-space the whole table, without extra row spacing.
-  \item Align comparable values, especially decimals.
-  \item Avoid unnecessary gridlines.
-  \item Explain abbreviations, symbols, statistical significance, and
-        exceptions in table notes.
-  \item Identify the source when a table is reproduced or adapted from another work.
-  \item Obtain permission where required, and acknowledge the copyright holder.
-  \item Keep text readable at the final print size.
-\end{itemize}
+\begin{infogrid}{2}
+\checktile{Clear column headings, with units where relevant}
+\checktile{The whole table single-spaced, without extra row spacing}
+\checktile{Comparable values aligned, especially decimals}
+\checktile{No unnecessary gridlines}
+\checktile{Abbreviations, symbols, significance, and exceptions explained in notes}
+\checktile{The source identified for reproduced or adapted tables}
+\checktile{Permission obtained where required; copyright holder acknowledged}
+\checktile{Text readable at the final print size}
+\end{infogrid}
 
-Keep tables within the margins. For large tables, use landscape pages, split
-them, repeat headings across pages, or move them to an appendix.
+Keep tables within the margins. For a large table, use one of these options:
+
+\chevrons{4}{{Landscape/page},{Split/the table},{Repeat headings/across pages},{Appendix/move it}}
 
 \keepwithsample
 \textbf{Table example.} Introduce the table in the text and place its caption
@@ -1124,26 +1302,28 @@ only figures that support the discussion, and refer to each one in the text.
 
 \subsection{Numbering and captions}
 
-Number figures by chapter (for example, Figure~4.1), and place the caption
-below the figure.
-
-Describe the figure briefly. Define unfamiliar symbols, colours, line styles,
-and abbreviations in the caption or legend.
+\begin{infogrid}{3}
+\numtile{1}{By chapter}{Number figures by chapter, for example Figure~4.1.}
+\numtile{2}{Caption below}{Describe the figure briefly.}
+\numtile{3}{Define the unfamiliar}{Explain symbols, colours, line styles, and
+  abbreviations in the caption or legend.}
+\end{infogrid}
 
 \subsection{Image quality}
 
-\begin{itemize}
-  \item Use images that are sharp at the final print size.
-  \item Keep labels, axes, legends, and notes readable.
-  \item Use colour when it improves clarity.
-  \item Make graphs readable in greyscale where possible.
-  \item Preserve image proportions.
-  \item State the source of reproduced or adapted figures, and obtain
-        permission where required.
-\end{itemize}
+\begin{infogrid}{2}
+\checktile{Sharp at the final print size}
+\checktile{Labels, axes, legends, and notes readable}
+\checktile{Colour used when it improves clarity}
+\checktile{Graphs readable in greyscale where possible}
+\checktile{Image proportions preserved}
+\checktile{Sources stated, and permission obtained where required}
+\end{infogrid}
 
-Place each figure after its first mention or on the nearest suitable page. Keep
-the figure and caption within the margins.
+\begin{infogrid}{2}
+\tile{Placement}{After the first mention, or on the nearest suitable page.}
+\tile{Margins}{Keep the figure and its caption within the margins.}
+\end{infogrid}
 
 \keepwithsample
 \textbf{Figure example.} Introduce the figure in the text, centre it, and place
@@ -1173,15 +1353,15 @@ its caption and source below it.
 \section{Equations, symbols, and units}
 % ===========================================================================
 
-Centre important displayed equations and number them by chapter, with the number
-aligned at the right margin (for example, Equation~(3.1)).
-
-Define symbols at first use. Use consistent type for variables, vectors,
-matrices, functions, units, and labels, and punctuate equations as part of the
-sentence.
-
-Include every numbered equation in the list of equations with a short
-descriptive title; do not reproduce the full expression in the list.
+\begin{infogrid}{3}
+\numtile{1}{Display and number}{Centre important displayed equations. Number them
+  by chapter, aligned at the right margin, for example (3.1).}
+\numtile{2}{Symbols and type}{Define symbols at first use. Use consistent type
+  for variables, vectors, matrices, functions, units, and labels. Punctuate
+  equations as part of the sentence.}
+\numtile{3}{List of equations}{List every numbered equation with a short
+  descriptive title; do not reproduce the expression.}
+\end{infogrid}
 
 \keepwithsample
 \textbf{Equation example.} Introduce the equation, number it by chapter, and
@@ -1211,38 +1391,41 @@ define its symbols.
 \section{Citations and references}
 % ===========================================================================
 
-Use APA 7th edition for all citations and references. Page layout, headings,
-tables, and figure placement follow this manual. Author--year examples:
+Use APA 7th edition for all citations and references; page layout, headings,
+tables, and figure placement follow this manual.
 
-\begin{itemize}
-  \item narrative: Lamport (1994) explains that \ldots;
-  \item parenthetical: (Lamport, 1994); and
-  \item multiple sources: (Knuth, 1984; Lamport, 1994).
-\end{itemize}
+\begin{infogrid}{3}
+\tile{Narrative}{Lamport (1994) explains that \ldots}
+\tile{Parenthetical}{(Lamport, 1994)}
+\tile{Multiple sources}{(Knuth, 1984; Lamport, 1994)}
+\end{infogrid}
 
-Place \textbf{REFERENCES} after the chapters and before the appendices. Sort
-entries alphabetically by first-author surname. Use 12-point Times New Roman,
-double spacing, a 1.27~cm hanging indent, and no extra space between entries.
+Place \textbf{REFERENCES} after the chapters and before the appendices.
+
+\begin{infogrid}{4}
+\stat{A--Z}{Alphabetical by first-author surname}
+\stat{12 pt}{Times New Roman}
+\stat{Double}{Spacing, with no extra space between entries}
+\stat{1.27 cm}{Hanging indent}
+\end{infogrid}
 
 Check that:
 
-\begin{itemize}
-  \item every recoverable source cited in the text appears in the reference list;
-  \item every reference-list entry is cited in the text;
-  \item authors' names, publication dates, titles, editions, journal details,
-        page ranges, and identifiers are accurate;
-  \item capitalization and punctuation are consistent;
-  \item direct quotations include the required page or location information;
-  \item secondary citations are avoided or clearly identified; and
-  \item APA 7th edition is applied consistently.
-\end{itemize}
-
-Check reference-manager and AI-generated output against the original sources.
+\begin{infogrid}{2}
+\checktile{Every recoverable source cited in the text is in the reference list}
+\checktile{Every reference-list entry is cited in the text}
+\checktile{Names, dates, titles, editions, journal details, pages, and identifiers are accurate}
+\checktile{Capitalization and punctuation are consistent}
+\checktile{Direct quotations include page or location information}
+\checktile{Secondary citations are avoided or clearly identified}
+\checktile{APA 7th edition is applied consistently}
+\checktile{Reference-manager and AI output is checked against the original sources}
+\end{infogrid}
 
 Table~\ref{tab:cite} shows APA~7 citation forms. The sample sentences
 illustrate formatting; they are not evidence for the claims shown.
 
-\begin{table}[htbp]
+\begin{table}[H]
 \caption{Simulated author--year inline citation situations.}
 \label{tab:cite}
 \small
@@ -1276,51 +1459,57 @@ each situation.
 
 \subsection{APA 7 reference rules}
 
-\begin{itemize}
-  \item Use surnames and initials. List all authors up to 20; for 21 or more,
-        list the first 19, an ellipsis, and the final author.
-  \item Use an ampersand before the final author in references and
-        parenthetical citations, and \emph{and} in narrative citations.
-  \item For three or more authors, use the first surname and \emph{et al.}\ in
-        the text from the first citation, unless more names are needed to
-        distinguish sources.
-  \item Use sentence case for book, article, report, and webpage titles.
-        Italicize standalone titles, journal names, and journal volume numbers;
-        keep issue numbers in regular type.
-  \item Include a DOI as a URL when available. Otherwise, include a URL for
-        publicly accessible online sources, and omit routine academic-database
-        URLs. Do not add a full stop after a DOI or URL.
-  \item Omit the publisher or website name when it is the same as the author.
-        Use \emph{n.d.}\ when no date is available. If there is no author, move
-        the title to the author position.
-  \item Order works by the same author from earliest to latest. Distinguish works
-        by the same author in the same year with a, b, and so on, consistently
-        in the text and references.
-\end{itemize}
+\begin{infogrid}{2}
+\numtile{1}{Authors}{Surnames and initials. List all authors up to 20; for 21 or
+  more, list the first 19, an ellipsis, and the final author.}
+\numtile{2}{Ampersand}{Before the final author in references and parenthetical
+  citations; \emph{and} in narrative citations.}
+\numtile{3}{Et al.}{For three or more authors, the first surname and \emph{et
+  al.}\ from the first citation, unless more names are needed to distinguish
+  sources.}
+\numtile{4}{Titles}{Sentence case for book, article, report, and webpage titles.
+  Italicize standalone titles, journal names, and volume numbers; issue numbers
+  stay regular.}
+\numtile{5}{DOIs and URLs}{A DOI as a URL when available; otherwise a URL for
+  publicly accessible sources. Omit routine database URLs and any full stop
+  after a DOI or URL.}
+\numtile{6}{Missing elements}{Omit a publisher that is the same as the author.
+  Use \emph{n.d.}\ when there is no date; with no author, move the title to the
+  author position.}
+\numtile{7}{Order}{Same author: earliest to latest. Same author and year: a, b,
+  and so on, consistently in text and references.}
+\tile{Basis}{APA 7th edition. These rules cover routine citation and reference
+  formatting.}
+\end{infogrid}
 
 \textbf{Common reference patterns.} Replace the descriptive fields with the
 source details. These are patterns, not sources to cite.
 
-\begin{description}[style=nextline,leftmargin=1.2em,itemsep=3pt,font=\normalfont\bfseries]
-  \item[Journal article] Author, A. A., \& Author, B. B. (Year). Article title.
-    \emph{Journal Title, volume}(issue), page range. DOI or URL
-  \item[Book] Author, A. A. (Year). \emph{Book title} (edition, if not the first).
-    Publisher. DOI or URL
-  \item[Edited-book chapter] Author, A. A. (Year). Chapter title. In E. E. Editor
-    (Ed.), \emph{Book title} (pp.~xx--xx). Publisher. DOI or URL
-  \item[Report] Organization. (Year). \emph{Report title} (Report No., if given).
-    Publisher, if different from the author. URL
-  \item[Webpage] Author or organization. (Year, Month Day). \emph{Page title}.
-    Site name, if different from the author. URL
-  \item[Thesis in a repository] Author, A. A. (Year). \emph{Thesis title}
-    [Master's thesis or Doctoral dissertation, Institution]. Repository name. URL
-\end{description}
+\begin{infogrid}{2}
+\tile{Journal article}{Author, A. A., \& Author, B. B. (Year). Article title.
+  \emph{Journal Title, volume}(issue), page range. DOI or URL}
+\tile{Book}{Author, A. A. (Year). \emph{Book title} (edition, if not the first).
+  Publisher. DOI or URL}
+\tile{Edited-book chapter}{Author, A. A. (Year). Chapter title. In E. E. Editor
+  (Ed.), \emph{Book title} (pp.~xx--xx). Publisher. DOI or URL}
+\tile{Report}{Organization. (Year). \emph{Report title} (Report No., if given).
+  Publisher, if different from the author. URL}
+\tile{Webpage}{Author or organization. (Year, Month Day). \emph{Page title}.
+  Site name, if different from the author. URL}
+\tile{Thesis in a repository}{Author, A. A. (Year). \emph{Thesis title}
+  [Master's thesis or Doctoral dissertation, Institution]. Repository name. URL}
+\end{infogrid}
 
-\textbf{Quotations.} Enclose quotations of fewer than 40 words in quotation
-marks. For 40 words or more, use a double-spaced block indented 1.27~cm from the
-left, without quotation marks or extra space before or after. Give the author,
-year, and page number; use a paragraph or section locator if the source has no
-pages. Place a block quotation's citation after its closing punctuation.
+\textbf{Quotations.}
+\twopanel{FEWER THAN 40 WORDS}{\begin{igitems}
+  \item Enclose in quotation marks
+  \item Give the author, year, and page number
+\end{igitems}}{40 WORDS OR MORE}{\begin{igitems}
+  \item Double-spaced block, indented 1.27~cm from the left
+  \item No quotation marks; no extra space before or after
+  \item Citation after the closing punctuation
+\end{igitems}}
+Use a paragraph or section locator when the source has no page numbers.
 
 \begin{figure}[H]
 \panelhead{References}{Format notes}
@@ -1347,21 +1536,30 @@ pages. Place a block quotation's citation after its closing punctuation.
 
 Use appendices for supporting material that would interrupt the chapters, such
 as instruments, detailed tables, analyses, consent forms, interview guides, and
-proofs.
+proofs. Appendices follow the references and are lettered:
 
-Appendices follow the references and are identified alphabetically:
+\begin{center}
+\begin{tikzpicture}[x=1mm,y=1mm]
+  \foreach \l/\t/\c [count=\i] in {A/Research Instrument/iucpurple,
+      B/Supplementary Results/iucteal,C/Additional Documentation/iucrose!85!black} {
+    \pgfmathsetmacro\x{(\i-1)*52}
+    \fill[\c,rounded corners=3pt] (\x,0) rectangle ({\x+50},-16);
+    \fill[\c,rounded corners=2pt] (\x,0) rectangle ({\x+20},4);
+    \node[text=white,font=\sffamily\bfseries\scriptsize] at ({\x+10},1.6) {APPENDIX \l};
+    \node[text=white,font=\sffamily\small\bfseries,align=center,text width=44mm]
+      at ({\x+25},-8) {\t};
+  }
+\end{tikzpicture}
+\end{center}
 
-\begin{itemize}
-  \item Appendix A: Research Instrument
-  \item Appendix B: Supplementary Results
-  \item Appendix C: Additional Documentation
-\end{itemize}
+\begin{infogrid}{4}
+\stat{New page}{for each appendix, with a descriptive title}
+\stat{Listed}{in the contents and the list of appendices}
+\stat{Arabic}{page numbering continues}
+\stat{Referred}{to in the main text}
+\end{infogrid}
 
-Start each appendix on a new page with a descriptive title, and include it in
-the contents and the list of appendices. Continue Arabic page numbering.
-
-Refer to each appendix in the main text. Keep essential evidence and methods in
-the relevant chapter.
+Keep essential evidence and methods in the relevant chapter.
 
 \begin{figure}[H]
 \panelhead{Appendix opening}{Format notes}
@@ -1382,33 +1580,42 @@ the relevant chapter.
 \label{fig:appsample}
 \end{figure}
 
+\clearpage
 % ===========================================================================
 \section{Printing, paper, binding, and spine}
 % ===========================================================================
 
 These requirements apply to all study modes:
 
-\begin{itemize}
-  \item A4 white paper of at least 80~gsm, printed single-sided at actual size;
-  \item black body text, with colour in figures and tables where it improves clarity;
-  \item four final hardbound copies;
-  \item purple covers and spines for all master's awards;
-  \item black covers and spines for all doctoral awards, including professional doctorates;
-  \item gold hot-stamped lettering in the sizes specified in this manual; and
-  \item one final PDF; editable source files are not required.
-\end{itemize}
+\begin{infogrid}{4}
+\stat{A4, 80 gsm}{White paper, printed single-sided at actual size}
+\stat{Black}{Body text; colour in figures and tables where it aids clarity}
+\stat{4 copies}{Final hardbound copies}
+\stat{1 PDF}{Editable source files are not required}
+\end{infogrid}
 
-There is no fixed PDF file-size limit. Use a clear filename that identifies the
-student and the manuscript, for example \texttt{StudentID\_Surname\_Thesis.pdf}.
-This naming pattern is recommended, not compulsory.
+\begin{infogrid}{3}
+\swatch{iucpurple}{Master's awards}{Purple covers and spines.}
+\swatch{black}{Doctoral awards}{Black covers and spines, including professional
+  doctorates.}
+\tile{Gold lettering}{Hot-stamped, in the sizes specified in this manual
+  (Section~5).}
+\end{infogrid}
 
-The PDF must open correctly, contain readable text and images, and match the
-printed copies. Embed all fonts, and remove draft comments and tracked changes.
-Check every page at its final size.
+\textbf{The final PDF.}
+\begin{infogrid}{2}
+\checktile{Opens correctly, with readable text and images}
+\checktile{Matches the printed copies}
+\checktile{All fonts embedded}
+\checktile{Draft comments and tracked changes removed}
+\checktile{Every page checked at its final size}
+\checktile{Clear filename, e.g.\ \texttt{StudentID\_Surname\_Thesis.pdf} (recommended)}
+\end{infogrid}
 
-Match the cover and spine details to the title page and registration records.
-Bind the final copies only after academic approval and a complete check of the
-printed proof.
+There is no fixed PDF file-size limit.
+
+\chevrons{4}{{Academic approval/of the manuscript},{Printed proof/checked completely},
+  {Cover and spine/match title page and records},{Binding/of the final copies}}
 
 % ===========================================================================
 \section{Using the LaTeX template}\label{sec:latex}
