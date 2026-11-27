@@ -6,7 +6,8 @@ Manual, Edition 3.0** (issued 23 October 2026): margins, fonts, spacing,
 headings, pagination, contents and lists, captions, APA 7 references,
 appendices, cover, title page, and spine.
 
-**New to LaTeX?** Start with the [Student Guide](STUDENT_GUIDE.md).
+**New to LaTeX?** Read the illustrated [User Manual (PDF)](docs/IUC-LaTeX-Template-User-Manual.pdf)
+or the shorter [Student Guide](STUDENT_GUIDE.md).
 
 The manual remains the authority. If this template and the manual disagree,
 follow the manual and please open an issue.
@@ -49,6 +50,12 @@ latexmk -c
 
 Every push to GitHub also builds `main.pdf` and `spine.pdf`
 (see `.github/workflows/build.yml`; download them from the run's artifacts).
+
+## VS Code
+
+The repository includes `.vscode/settings.json`, so the LaTeX Workshop
+extension builds with XeLaTeX and biber. Without it, the extension's default
+recipe uses pdfLaTeX, which this template does not support.
 
 ## Fonts
 

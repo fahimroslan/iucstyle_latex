@@ -1,5 +1,8 @@
 # Student Guide: Writing Your IUC Thesis with This Template
 
+> An illustrated, step-by-step version of this guide is in the
+> [User Manual (PDF)](docs/IUC-LaTeX-Template-User-Manual.pdf).
+
 You do **not** need to learn LaTeX to use this template. You type your own
 words into a few files. The template does all the formatting required by the
 IUC Thesis & Dissertation Style Manual: margins, fonts, spacing, page

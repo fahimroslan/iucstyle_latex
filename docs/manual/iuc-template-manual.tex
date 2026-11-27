@@ -1,0 +1,1084 @@
+% IUC LaTeX Thesis Template: User Manual
+% Build:  cd docs/manual && latexmk -xelatex iuc-template-manual.tex
+\documentclass[11pt,a4paper]{article}
+
+% ---------------------------------------------------------------------------
+% Page, fonts, colours
+% ---------------------------------------------------------------------------
+\usepackage[a4paper,top=27mm,bottom=24mm,left=22mm,right=22mm,
+  headheight=14mm,headsep=6mm,footskip=11mm]{geometry}
+\usepackage{fontspec}
+\setmainfont{Latin Modern Sans}
+\setmonofont{Latin Modern Mono}
+\usepackage[british]{babel}
+\usepackage{xcolor}
+\definecolor{iucpurple}{HTML}{5A2D82}
+\definecolor{iucdeep}{HTML}{4D2470}
+\definecolor{iucteal}{HTML}{2D6268}
+\definecolor{iucgold}{HTML}{D9B96E}
+\definecolor{iucrose}{HTML}{C58A73}
+\definecolor{iuccream}{HTML}{F7F0E3}
+\definecolor{iuclav}{HTML}{F2EFF6}
+\definecolor{iuctealbg}{HTML}{E7F0F0}
+\definecolor{iucgrey}{HTML}{5F5A66}
+\definecolor{codebg}{HTML}{F7F5FA}
+
+\usepackage{graphicx}
+\graphicspath{{img/}}
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes.geometric,arrows.meta,calc,shadows}
+\usepackage[most]{tcolorbox}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{array,tabularx,booktabs,colortbl}
+\usepackage{titlesec,titletoc}
+\usepackage{fancyhdr}
+\usepackage{amssymb}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={IUC LaTeX Thesis Template: User Manual},
+  pdfauthor={Innovative University College}}
+
+\setlength\parindent{0pt}
+\setlength\emergencystretch{3em}
+\setlength\parskip{6pt}
+\linespread{1.08}
+\renewcommand\arraystretch{1.25}
+
+\makeatletter\newcommand\printtoc{\@starttoc{toc}}\makeatother
+\newcommand\repourl{https://github.com/fahimroslan/iucstyle_latex}
+\newcommand\repo{\href{\repourl}{\texttt{github.com/fahimroslan/iucstyle\_latex}}}
+
+% ---------------------------------------------------------------------------
+% Headings
+% ---------------------------------------------------------------------------
+\titleformat{\section}[block]
+  {\normalfont\bfseries\color{iucpurple}\fontsize{22}{26}\selectfont}
+  {\tikz[baseline=(n.base)]\node[fill=iucpurple,text=white,rounded corners=3pt,
+     inner xsep=7pt,inner ysep=5pt,font=\bfseries\fontsize{18}{20}\selectfont](n){\thesection};}
+  {0.6em}{}[{\color{iucgold}\titlerule[1.4pt]}]
+\titlespacing*{\section}{0pt}{0pt}{14pt}
+\titleformat{\subsection}
+  {\normalfont\bfseries\color{iucteal}\fontsize{14}{17}\selectfont}{\thesubsection}{0.7em}{}
+\titlespacing*{\subsection}{0pt}{16pt}{4pt}
+\titleformat{\subsubsection}
+  {\normalfont\bfseries\color{iucdeep}\large}{}{0pt}{}
+\titlespacing*{\subsubsection}{0pt}{10pt}{2pt}
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+\newcommand\chapterbreak{\clearpage}
+\let\oldsection\section
+\renewcommand\section{\clearpage\oldsection}
+
+\titlecontents{section}[2.6em]{\addvspace{8pt}\bfseries\color{iucpurple}}
+  {\contentslabel{2.6em}}{}{\hfill\contentspage}
+\titlecontents{subsection}[5.2em]{\addvspace{1pt}\color{iucgrey}}
+  {\contentslabel{2.6em}}{}{\titlerule*[0.6em]{.}\contentspage}
+
+% ---------------------------------------------------------------------------
+% Header and footer
+% ---------------------------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\raisebox{-1mm}{\includegraphics[height=7mm]{iuc-logo-purple}}}
+\fancyhead[R]{\small\color{iucgrey}LaTeX Thesis Template\enspace\textbar\enspace User Manual}
+\fancyfoot[L]{\footnotesize\color{iucgrey}Innovative University College}
+\fancyfoot[R]{\small\bfseries\color{iucpurple}\thepage}
+\renewcommand\headrule{{\color{iucgold}\hrule height 0.8pt}}
+\renewcommand\footrulewidth{0pt}
+\fancypagestyle{plain}{}
+
+% ---------------------------------------------------------------------------
+% Inline helpers
+% ---------------------------------------------------------------------------
+\newcommand\cmd[1]{\texttt{\textbackslash #1}}
+\newcommand\file[1]{\textcolor{iucteal}{\texttt{#1}}}
+\newtcbox{\ui}{on line,colback=iuclav,colframe=iucpurple!45,boxrule=0.4pt,arc=2pt,
+  boxsep=0pt,left=3pt,right=3pt,top=1.5pt,bottom=1pt,
+  fontupper=\small\bfseries\color{iucdeep}}
+\newcommand\menu[1]{\ui{#1}}
+
+% ---------------------------------------------------------------------------
+% Callout boxes
+% ---------------------------------------------------------------------------
+\tcbset{iucbase/.style={enhanced,boxrule=0pt,arc=3pt,
+  left=10pt,right=10pt,top=7pt,bottom=7pt,before skip=8pt,after skip=8pt,
+  fonttitle=\bfseries\small,coltitle=white}}
+\newtcolorbox{tipbox}[1][Tip]{iucbase,colback=iuctealbg,
+  borderline west={4pt}{0pt}{iucteal},
+  title={#1},attach title to upper={\enspace},
+  fonttitle=\bfseries\color{iucteal},coltitle=iucteal}
+\newtcolorbox{notebox}[1][Note]{iucbase,colback=iuclav,
+  borderline west={4pt}{0pt}{iucpurple},
+  title={#1},attach title to upper={\enspace},
+  fonttitle=\bfseries\color{iucpurple},coltitle=iucpurple}
+\newtcolorbox{warnbox}[1][Important]{iucbase,colback=iuccream,
+  borderline west={4pt}{0pt}{iucrose},
+  title={#1},attach title to upper={\enspace},
+  fonttitle=\bfseries\color{iucrose!80!black},coltitle=iucrose!80!black}
+\newtcolorbox{promptbox}[1][Ask the AI]{iucbase,colback=iuccream,colframe=iucgold,
+  boxrule=0.8pt,title={\textcolor{white}{\ #1}},colbacktitle=iucdeep,
+  fonttitle=\bfseries\small,toptitle=2pt,bottomtitle=2pt,
+  fontupper=\itshape}
+
+% Code listings
+\lstdefinestyle{iuc}{language=[LaTeX]TeX,basicstyle=\ttfamily\small,
+  texcsstyle=*\color{iucpurple}\bfseries,commentstyle=\color{iucgrey}\itshape,
+  keywordstyle=\color{iucteal},columns=fullflexible,keepspaces=true,
+  showstringspaces=false,breaklines=true,upquote=true,
+  moretexcs={textcite,parencite,addbibresource,printreferences,tablenote,
+    figuresource,eqtitle,makecover,maketitlepage,makedeclaration,keywords,
+    matricno,degree,degreeabbr,submissiondate,submissionyear,declarationdate,
+    institution,toprule,midrule,bottomrule,mainmatter,frontmatter}}
+\lstdefinestyle{plain}{basicstyle=\ttfamily\small,columns=fullflexible,
+  keepspaces=true,breaklines=true,upquote=true}
+% (no optional argument: a look-ahead for "[" would swallow the first line)
+\tcbset{iuccode/.style={enhanced,listing only,colback=codebg,colframe=iucpurple!25,
+  boxrule=0.5pt,arc=3pt,left=8pt,right=8pt,top=4pt,bottom=4pt,
+  before skip=6pt,after skip=8pt,listing options={style=iuc}}}
+\newtcblisting{code}{iuccode}
+\newtcblisting{codetitled}[1]{iuccode,title={\small\bfseries #1},
+  colbacktitle=iucteal,coltitle=white}
+\newtcblisting{shell}{enhanced,listing only,colback=iucdeep,colframe=iucdeep,
+  arc=3pt,left=8pt,right=8pt,top=4pt,bottom=4pt,before skip=6pt,after skip=8pt,
+  listing options={style=plain,basicstyle=\ttfamily\small\color{white}}}
+\newtcblisting{bib}{enhanced,listing only,colback=codebg,colframe=iucpurple!25,
+  boxrule=0.5pt,arc=3pt,left=8pt,right=8pt,top=4pt,bottom=4pt,
+  listing options={style=plain}}
+
+% Numbered steps
+\newcommand\stepnum[1]{\tikz[baseline=(n.base)]\node[circle,fill=iucpurple,
+  text=white,font=\footnotesize\bfseries,inner sep=0pt,minimum size=1.5em](n){#1};}
+\newlist{steps}{enumerate}{1}
+\setlist[steps]{label=\protect\stepnum{\arabic*},leftmargin=2.4em,labelsep=0.6em,
+  itemsep=4pt,topsep=4pt}
+\setlist[itemize]{label={\color{iucgold}\small$\blacksquare$},itemsep=2pt,topsep=3pt,leftmargin=1.6em}
+
+% Difficulty dots
+\newcommand\rating[1]{\foreach \i in {1,...,4}{\ifnum\i>#1\textcolor{iucpurple!20}{$\bullet$}\else\textcolor{iucpurple}{$\bullet$}\fi}}
+
+% Path cards
+\newtcolorbox{pathcard}[3]{enhanced,colback=white,colframe=#3,boxrule=0.8pt,arc=4pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt,equal height group=paths,
+  title={\large\bfseries #1\hfill\normalsize #2},colbacktitle=#3,coltitle=white,
+  toptitle=3pt,bottomtitle=3pt}
+
+% Table header row
+\newcommand\thc[1]{\textcolor{white}{\bfseries #1}}
+\newcommand\headrow{\rowcolor{iucpurple}}
+
+\begin{document}
+
+% ===========================================================================
+% Cover
+% ===========================================================================
+\thispagestyle{empty}
+\begin{tikzpicture}[remember picture,overlay]
+  \coordinate (NW) at (current page.north west);
+  % background
+  \fill[iucdeep] (current page.south west) rectangle (current page.north east);
+  \fill[iucpurple] (NW) rectangle ($(current page.north east)+(0,-62mm)$);
+  % teal diagonal
+  \fill[iucteal] ($(current page.south east)+(0,175mm)$) -- (current page.south east)
+    -- ($(current page.south west)+(70mm,0)$) -- cycle;
+  \draw[iucgold!60,line width=0.4pt] ($(current page.south east)+(0,175mm)$)
+    -- ($(current page.south west)+(70mm,0)$);
+  % stripes
+  \fill[iucgold] ($(NW)+(20mm,-62mm)$) rectangle ($(NW)+(152mm,-63.6mm)$);
+  \fill[iucteal!80!white] ($(NW)+(152mm,-62mm)$) rectangle ($(NW)+(176mm,-63.6mm)$);
+  \fill[iucrose] ($(NW)+(176mm,-62mm)$) rectangle ($(NW)+(190mm,-63.6mm)$);
+  % logo
+  \node[anchor=north west,inner sep=0pt] at ($(NW)+(20mm,-16mm)$)
+    {\includegraphics[width=100mm]{iuc-logo-white}};
+  % title block
+  \fill[iucgold] ($(NW)+(20mm,-88mm)$) rectangle ($(NW)+(21.6mm,-150mm)$);
+  \node[anchor=north west,align=left,text=iucgold,font=\bfseries\small]
+    at ($(NW)+(28mm,-88mm)$) {THESIS TEMPLATE TOOLKIT};
+  \node[anchor=north west,align=left,text=white,font=\bfseries\fontsize{34}{38}\selectfont]
+    at ($(NW)+(27mm,-96mm)$) {LATEX THESIS\\TEMPLATE};
+  \node[anchor=north west,align=left,text=iucgold!90!white,font=\bfseries\fontsize{24}{28}\selectfont]
+    at ($(NW)+(27.5mm,-123mm)$) {USER MANUAL};
+  \node[anchor=north west,align=left,text=white,font=\large,text width=120mm]
+    at ($(NW)+(28mm,-137mm)$)
+    {Write, format, and submit your thesis\\on your computer, online, or with AI};
+  % illustration: two document pages and a code badge
+  \begin{scope}[shift={($(current page.south east)+(-62mm,128mm)$)}]
+    \fill[black,opacity=0.18] (-27mm,-37mm) rectangle (11mm,15mm);
+    \fill[white] (-30mm,-34mm) rectangle (8mm,18mm);
+    \foreach \y in {6,2,-2,-6,-10,-14,-18,-22}
+      \fill[iucpurple!25] (-25mm,\y mm) rectangle (3mm,{\y mm+1.6mm});
+    \fill[black,opacity=0.18] (-11mm,-49mm) rectangle (27mm,3mm);
+    \fill[iuccream] (-14mm,-46mm) rectangle (24mm,6mm);
+    \fill[iucpurple] (-14mm,0mm) rectangle (24mm,6mm);
+    \node[text=white,font=\bfseries\scriptsize] at (5mm,3mm) {CHAPTER 1};
+    \foreach \y in {-6,-10,-14,-18,-22,-26,-30,-34}
+      \fill[iucteal!45] (-9mm,\y mm) rectangle (19mm,{\y mm+1.6mm});
+    \fill[iucgold] (24mm,-46mm) circle (11mm);
+    \node[text=iucdeep,font=\bfseries\fontsize{16}{16}\selectfont] at (24mm,-46mm) {\{\,\}};
+  \end{scope}
+  % info card
+  \fill[iuccream,rounded corners=5pt] ($(current page.south west)+(20mm,28mm)$)
+    rectangle ($(current page.south west)+(150mm,62mm)$);
+  \node[anchor=north west,align=left,text=iucdeep,font=\bfseries\small]
+    at ($(current page.south west)+(27mm,57mm)$)
+    {VERSION 1.0\quad\textbar\quad NOVEMBER 2026};
+  \node[anchor=north west,align=left,text=iucteal,font=\small,text width=116mm]
+    at ($(current page.south west)+(27mm,49mm)$)
+    {Companion to the IUC Thesis \& Dissertation Style Manual, Edition 3.0\\[2pt]
+     \texttt{github.com/fahimroslan/iucstyle\_latex}};
+  \node[anchor=south east,text=white,font=\scriptsize]
+    at ($(current page.south east)+(-20mm,12mm)$) {INNOVATIVE UNIVERSITY COLLEGE};
+  \fill[iucrose] (current page.south west) rectangle ($(current page.south east)+(0,3mm)$);
+\end{tikzpicture}
+\clearpage
+
+% ===========================================================================
+% Contents
+% ===========================================================================
+\pagenumbering{roman}
+{\color{iucpurple}\bfseries\fontsize{22}{26}\selectfont Contents\par}
+{\color{iucgold}\rule{\textwidth}{1.4pt}}
+\vspace{4pt}
+\printtoc
+\clearpage
+\pagenumbering{arabic}
+
+% ===========================================================================
+\section{Welcome}
+% ===========================================================================
+
+This manual shows you how to write your thesis, dissertation, or research
+project with the \textbf{IUC LaTeX thesis template}. You do not need to know
+LaTeX. You type your own words into a few files; the template takes care of
+the formatting that the \emph{IUC Thesis \& Dissertation Style Manual} requires.
+
+\subsection{What the template does for you}
+
+\begin{tcbraster}[raster columns=2,raster equal height,raster column skip=8pt,
+  raster row skip=8pt]
+\begin{tcolorbox}[colback=iuclav,colframe=iuclav,arc=4pt,fontupper=\small]
+  \textbf{\color{iucpurple}Page layout}\\
+  A4 paper, IUC margins (30/25/38/25 mm), 40 mm at chapter openings,
+  page numbers centred at the bottom.
+\end{tcolorbox}
+\begin{tcolorbox}[colback=iuclav,colframe=iuclav,arc=4pt,fontupper=\small]
+  \textbf{\color{iucpurple}Typography}\\
+  Times New Roman 12 pt, double-spaced body, 2 em indents, IUC heading
+  styles.
+\end{tcolorbox}
+\begin{tcolorbox}[colback=iuclav,colframe=iuclav,arc=4pt,fontupper=\small]
+  \textbf{\color{iucpurple}Front matter}\\
+  Cover, title page, declaration, abstracts, contents page, and all lists,
+  with Roman page numbers.
+\end{tcolorbox}
+\begin{tcolorbox}[colback=iuclav,colframe=iuclav,arc=4pt,fontupper=\small]
+  \textbf{\color{iucpurple}Numbering}\\
+  Chapters, sections, tables (4.1), figures (4.1), equations (3.1), and
+  appendices (A, B, \ldots) are numbered for you.
+\end{tcolorbox}
+\begin{tcolorbox}[colback=iuclav,colframe=iuclav,arc=4pt,fontupper=\small]
+  \textbf{\color{iucpurple}References}\\
+  APA 7th edition citations and reference list, sorted and formatted
+  automatically.
+\end{tcolorbox}
+\begin{tcolorbox}[colback=iuclav,colframe=iuclav,arc=4pt,fontupper=\small]
+  \textbf{\color{iucpurple}Binding}\\
+  A spine layout for the binder, with the required lettering and clear zones.
+\end{tcolorbox}
+\end{tcbraster}
+
+\subsection{What you still do}
+
+\begin{itemize}
+  \item Write the content, and check it is accurate and properly cited.
+  \item Enter your personal details exactly as in your registration records.
+  \item Meet the compulsory minimum word count for your study mode
+        (Style Manual, Section~3). The template does not count words.
+  \item Check every page of the final PDF before you submit.
+\end{itemize}
+
+\subsection{How to read this manual}
+
+Coloured boxes mark different kinds of advice:
+
+\begin{tipbox}A shortcut or good habit.\end{tipbox}
+\begin{notebox}Background information that helps you understand what is happening.\end{notebox}
+\begin{warnbox}Something that can cost you time or marks if you miss it.\end{warnbox}
+\begin{promptbox}A request you can copy into an AI assistant such as Claude or ChatGPT.\end{promptbox}
+
+Buttons and menus look like \ui{this}. File names look like \file{metadata.tex}.
+LaTeX commands look like \cmd{section}.
+
+% ===========================================================================
+\section{Choose your path}
+% ===========================================================================
+
+There are four ways to work with the template. They all produce the same PDF.
+Pick the one that suits you; you can switch later.
+
+\begin{tcbraster}[raster columns=2,raster column skip=10pt,raster row skip=10pt]
+\begin{pathcard}{A\enspace Overleaf}{online}{iucpurple}
+  Edit and build in your web browser.\par
+  \textbf{Install:} nothing\\
+  \textbf{Best for:} beginners\\
+  \textbf{Difficulty:} \rating{1}
+\end{pathcard}
+\begin{pathcard}{B\enspace Your computer}{offline}{iucteal}
+  Install a free LaTeX system and an editor.\par
+  \textbf{Install:} about 4 GB\\
+  \textbf{Best for:} long-term, offline work\\
+  \textbf{Difficulty:} \rating{3}
+\end{pathcard}
+\begin{pathcard}{C\enspace GitHub online}{online}{iucrose!85!black}
+  Edit files on github.com; the PDF is built for you.\par
+  \textbf{Install:} nothing\\
+  \textbf{Best for:} version history, backups\\
+  \textbf{Difficulty:} \rating{2}
+\end{pathcard}
+\begin{pathcard}{D\enspace AI assistant}{online}{iucdeep}
+  Describe changes in plain words; AI writes the LaTeX.\par
+  \textbf{Install:} nothing\\
+  \textbf{Best for:} anyone; combines with A, B, or C\\
+  \textbf{Difficulty:} \rating{1}
+\end{pathcard}
+\end{tcbraster}
+
+\subsection{Which path is right for me?}
+
+\begin{center}
+\begin{tikzpicture}[
+  q/.style={rectangle,rounded corners=4pt,fill=iuclav,draw=iucpurple,line width=0.6pt,
+    align=center,text width=44mm,minimum height=11mm,font=\small},
+  a/.style={rectangle,rounded corners=4pt,fill=#1,text=white,align=center,
+    text width=34mm,minimum height=10mm,font=\small\bfseries},
+  lab/.style={font=\scriptsize\bfseries,text=iucgrey},
+  arr/.style={-{Stealth[length=2.2mm]},line width=0.8pt,draw=iucpurple!70},
+  node distance=9mm and 12mm]
+  \node[q] (q1) {Do you want an AI to edit the files and build the PDF for you?};
+  \node[a=iucdeep,right=of q1] (d) {D\enspace AI assistant\\[-1pt]\footnotesize(Claude Code)};
+  \node[q,below=of q1] (q2) {Can you install about 4 GB of software?};
+  \node[q,below=of q2] (q3) {Do you want automatic backups and version history?};
+  \node[a=iucteal,right=of q2] (b) {B\enspace Your computer};
+  \node[a=iucrose!85!black,right=of q3] (c) {C\enspace GitHub online};
+  \node[a=iucpurple,below=of q3] (a) {A\enspace Overleaf};
+  \draw[arr] (q1) -- node[lab,above]{yes} (d);
+  \draw[arr] (q1) -- node[lab,left]{no} (q2);
+  \draw[arr] (q2) -- node[lab,above]{yes} (b);
+  \draw[arr] (q2) -- node[lab,left]{no} (q3);
+  \draw[arr] (q3) -- node[lab,above]{yes} (c);
+  \draw[arr] (q3) -- node[lab,left]{no} (a);
+\end{tikzpicture}
+\end{center}
+
+\begin{tipbox}
+Whatever path you choose, you can still use an AI chat assistant (Section~\ref{sec:ai})
+to help you write tables, references, and fix errors.
+\end{tipbox}
+
+\subsection{The five-minute version}
+
+\begin{steps}
+  \item Get your own copy of the template (Section~\ref{sec:get}).
+  \item Open \file{metadata.tex} and type your title, name, degree, and dates.
+  \item Replace the sample text in \file{chapters/chapter1.tex} with your own.
+  \item Build the PDF (Overleaf: \ui{Recompile}; computer: \ui{Build}; GitHub:
+        automatic).
+  \item Look at the result. Repeat steps 3--4 for each chapter.
+\end{steps}
+
+% ===========================================================================
+\section{Get your copy of the template}\label{sec:get}
+% ===========================================================================
+
+The template lives on GitHub at \repo. Never write your thesis in the original
+repository: make your own copy first.
+
+\subsection{Option 1: Download a ZIP file}
+For Overleaf or your own computer.
+\begin{steps}
+  \item Open \repo{} in your browser.
+  \item Click the green \ui{Code} button, then \ui{Download ZIP}.
+  \item Save the file. Do not unzip it if you are going to upload it to Overleaf.
+\end{steps}
+
+\subsection{Option 2: Make your own GitHub repository}
+For GitHub online (Path C) and Claude Code (Path D). You need a free GitHub account.
+\begin{steps}
+  \item Open \repo{} and sign in to GitHub.
+  \item Click \ui{Use this template} \textrightarrow{} \ui{Create a new repository}.
+        If you do not see this button, click \ui{Fork} instead.
+  \item Give it a name, for example \file{my-thesis}.
+  \item Choose \ui{Private} so that only you can see your thesis.
+  \item Click \ui{Create repository}.
+\end{steps}
+
+\begin{warnbox}[Keep your thesis private]
+Unpublished research, data, and personal details should not be public. Use a
+private repository, and never put passwords or confidential data in it.
+\end{warnbox}
+
+\subsection{What is inside}
+
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{@{}>{\ttfamily\leavevmode\color{iucteal}}p{43mm}X>{\centering\arraybackslash}p{18mm}@{}}
+\headrow \thc{File or folder} & \thc{What it contains} & \thc{You edit?} \\
+metadata.tex          & Your title, name, matric number, degree, dates & \textcolor{iucteal}{\checkmark} \\
+\rowcolor{iuclav}
+main.tex              & The order of the parts; document type (line 1) & \textcolor{iucteal}{\checkmark} \\
+frontmatter/          & Acknowledgement, abstracts, optional pages      & \textcolor{iucteal}{\checkmark} \\
+\rowcolor{iuclav}
+chapters/             & \texttt{chapter1.tex} to \texttt{chapter5.tex}   & \textcolor{iucteal}{\checkmark} \\
+appendices/           & \texttt{appendixA.tex}, \ldots                   & \textcolor{iucteal}{\checkmark} \\
+\rowcolor{iuclav}
+references.bib        & Your reference list                             & \textcolor{iucteal}{\checkmark} \\
+figures/              & Your images                                     & \textcolor{iucteal}{\checkmark} \\
+\rowcolor{iuclav}
+iucthesis.cls         & The formatting rules                            & \textcolor{iucrose}{No} \\
+spine.tex             & The spine strip for the binder                  & rarely \\
+\rowcolor{iuclav}
+latexmkrc, .vscode/, .github/ & Build settings                          & \textcolor{iucrose}{No} \\
+STUDENT\_GUIDE.md, README.md & Short guides                             & -- \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+% ===========================================================================
+\section{Path A: Overleaf}\label{sec:overleaf}
+% ===========================================================================
+
+Overleaf is a free website for writing LaTeX. Nothing needs to be installed.
+
+\begin{warnbox}[Check first]
+The template maintainers have not yet tested it on Overleaf. After step~5,
+make sure the sample thesis appears correctly before you start writing.
+\end{warnbox}
+
+\begin{steps}
+  \item Download the template as a ZIP file (Section~\ref{sec:get}, Option~1).
+  \item Go to \href{https://www.overleaf.com}{\texttt{overleaf.com}} and sign in
+        or create a free account.
+  \item Click \ui{New Project} \textrightarrow{} \ui{Upload Project} and choose the
+        ZIP file.
+  \item Click \ui{Menu} (top left). Under \textbf{Settings}, set
+        \ui{Compiler} to \ui{XeLaTeX}. Leave \ui{Main document} as \file{main.tex}.
+  \item Click \ui{Recompile}. The sample thesis appears on the right.
+  \item Open files from the list on the left and start editing
+        (Section~\ref{sec:fill}).
+  \item To submit, click the \ui{Download PDF} icon above the preview.
+\end{steps}
+
+\begin{notebox}[Why XeLaTeX?]
+The template uses modern fonts that need the XeLaTeX engine. With the default
+pdfLaTeX setting, the build stops with the message
+\emph{``This class needs XeLaTeX or LuaLaTeX''}.
+\end{notebox}
+
+\begin{tipbox}
+Free Overleaf accounts have a limit on how long a build may take. A long
+thesis with many large images may exceed it. Compress large images, or switch
+to Path~B or~C if this happens.
+\end{tipbox}
+
+% ===========================================================================
+\section{Path B: Your own computer}\label{sec:local}
+% ===========================================================================
+
+This path works offline and has no limits. It needs a one-time installation.
+
+\subsection{Install a LaTeX system}
+
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{@{}p{24mm}X@{}}
+\headrow \thc{System} & \thc{What to install} \\
+Windows & \href{https://tug.org/texlive/}{TeX Live} (\texttt{install-tl-windows.exe}); choose the full scheme.
+          Takes 30--60 minutes. \\
+\rowcolor{iuclav}
+macOS   & \href{https://tug.org/mactex/}{MacTeX} (\texttt{MacTeX.pkg}). \\
+Linux   & TeX Live from \href{https://tug.org/texlive/}{tug.org}, or the packages below. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+On Debian or Ubuntu Linux:
+\begin{shell}
+sudo apt install texlive-xetex texlive-latex-extra texlive-bibtex-extra \
+  biber texlive-fonts-recommended fonts-texgyre latexmk
+\end{shell}
+
+\subsection{Choose an editor}
+
+\subsubsection{Recommended: Visual Studio Code}
+\begin{steps}
+  \item Install \href{https://code.visualstudio.com}{Visual Studio Code} (free).
+  \item Open \ui{Extensions}, search for \textbf{LaTeX Workshop}, and click \ui{Install}.
+  \item \ui{File} \textrightarrow{} \ui{Open Folder} and choose your template folder.
+  \item Open \file{main.tex} and click the green \ui{\(\blacktriangleright\) Build LaTeX project}
+        button (top right). The PDF opens with \ui{View LaTeX PDF}.
+\end{steps}
+
+\begin{notebox}[Already configured]
+The template includes \file{.vscode/settings.json}, which tells LaTeX Workshop to
+build with XeLaTeX and biber. You do not need to change any settings.
+\end{notebox}
+
+\subsubsection{Alternative: TeXstudio}
+TeXstudio is a simpler, all-in-one LaTeX editor. It needs two settings:
+\begin{steps}
+  \item \ui{Options} \textrightarrow{} \ui{Configure TeXstudio} \textrightarrow{} \ui{Build}.
+  \item Set \ui{Default Compiler} to \ui{XeLaTeX} and \ui{Default Bibliography Tool}
+        to \ui{Biber}. Click \ui{OK}.
+  \item Open \file{main.tex} and press \ui{F5} (Build \& View).
+\end{steps}
+
+\subsubsection{Command line}
+In a terminal, inside the template folder:
+\begin{shell}
+latexmk main.tex        # build main.pdf
+latexmk spine.tex       # build spine.pdf for the binder
+latexmk -c              # remove temporary files
+\end{shell}
+
+\begin{tipbox}[Fonts]
+If Times New Roman and Arial Narrow are installed (standard on Windows and
+macOS), the template uses them. Otherwise it uses near-identical free fonts
+(TeX Gyre Termes and TeX Gyre Heros Condensed). Both are acceptable.
+\end{tipbox}
+
+% ===========================================================================
+\section{Path C: GitHub online}\label{sec:github}
+% ===========================================================================
+
+Edit your files on \texttt{github.com}. Every time you save, GitHub builds your
+PDF automatically. Every version is kept, so you can always go back.
+
+\begin{steps}
+  \item Make your own private repository (Section~\ref{sec:get}, Option~2).
+  \item Open a file, for example \file{metadata.tex}, and click the
+        \ui{\textit{pencil}} icon (\emph{Edit this file}).
+  \item Make your changes, then click \ui{Commit changes\ldots}. Write a short
+        note such as ``Add my title'', and click \ui{Commit changes} again.
+  \item Open the \ui{Actions} tab. Wait for the newest run to show a green tick
+        (about 4 minutes).
+  \item Click the run, scroll to \textbf{Artifacts}, and download
+        \ui{iuc-thesis-pdf}. Unzip it to find \file{main.pdf} and \file{spine.pdf}.
+\end{steps}
+
+\begin{tipbox}[Upload images]
+In a folder such as \file{figures/}, click \ui{Add file} \textrightarrow{}
+\ui{Upload files}.
+\end{tipbox}
+\begin{tipbox}[Go back in time]
+Open any file and click \ui{History} to see and restore earlier versions.
+\end{tipbox}
+
+\begin{warnbox}[Red cross instead of green tick?]
+The build failed. Click the run, then \ui{build}, and look for lines starting
+with \texttt{!}. Section~\ref{sec:trouble} explains common errors. You can also
+paste the error into an AI assistant (Section~\ref{sec:ai}).
+\end{warnbox}
+
+\begin{notebox}
+Private repositories on free GitHub accounts include a monthly allowance of
+build minutes. Each build takes about 4 minutes, so the allowance covers
+hundreds of builds.
+\end{notebox}
+
+% ===========================================================================
+\section{Path D: Working with AI}\label{sec:ai}
+% ===========================================================================
+
+AI assistants can write the LaTeX for you, so you can focus on your research.
+There are three ways to use them, from most to least automated.
+
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{@{}p{34mm}XXp{20mm}@{}}
+\headrow \thc{Tool} & \thc{What it does} & \thc{What you do} & \thc{Builds PDF?} \\
+Claude Code     & Edits your files and builds the PDF       & Describe changes in plain words & Yes \\
+\rowcolor{iuclav}
+Claude Projects & Knows your template; drafts LaTeX         & Copy answers into your files    & No \\
+Any AI chat     & Answers one question at a time            & Paste text in, copy LaTeX out   & No \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection{Claude Code: the AI edits and builds for you}
+
+\begin{steps}
+  \item Make your own GitHub repository (Section~\ref{sec:get}, Option~2).
+  \item Go to \href{https://claude.ai/code}{\texttt{claude.ai/code}} and connect
+        your GitHub account when asked.
+  \item Start a new session and select your thesis repository.
+  \item Ask for what you want in plain words (examples below). Claude edits the
+        files, builds the PDF, and shows you the result.
+  \item Ask Claude to save (commit and push) the changes to your repository.
+\end{steps}
+
+\begin{promptbox}[Example requests for Claude Code]
+``Put my details in metadata.tex: title \ldots, name \ldots, matric number \ldots,
+Master of Business Administration, submitted March 2027.''\par
+``Replace section 1.1 with the text in the attached Word file.''\par
+``Add this table of survey results to Chapter 4 with the caption
+\emph{Respondent Demographics}.''\par
+``Build the PDF and show me the table of contents.''
+\end{promptbox}
+
+\begin{tipbox}[Faster sessions]
+Each new cloud session starts without LaTeX installed. Ask Claude once to
+``save a setup script that installs TeX Live for this environment'' so later
+sessions are ready immediately.
+\end{tipbox}
+
+\subsection{Claude Projects: a writing assistant that knows your template}
+
+\begin{steps}
+  \item On \texttt{claude.ai}, open \ui{Projects} \textrightarrow{} \ui{Create project}.
+  \item In \textbf{Project knowledge}, click \ui{+} \textrightarrow{} \ui{GitHub}
+        and select your repository. Add \file{README.md}, \file{iucthesis.cls},
+        \file{main.tex}, \file{metadata.tex}, and your chapter files.
+  \item Click \ui{+} \textrightarrow{} \ui{Upload} and add the IUC Style Manual PDF.
+  \item Paste the instructions below into \ui{Project instructions}.
+  \item Chat inside the project. Copy the LaTeX it gives you into your files.
+\end{steps}
+
+\begin{codetitled}{Project instructions (copy this)}
+I am writing an IUC thesis with the iucthesis LaTeX template in this project.
+- Follow the IUC Style Manual and the template README.
+- Use only \chapter, \section, \subsection.
+- Tables: \caption above, \tablenote{} for notes.
+- Figures: \caption below, \figuresource{} for the source.
+- Every numbered equation needs \eqtitle{Short title}.
+- Cite with \textcite{} or \parencite{} (APA 7); give BibTeX for new sources.
+- Return LaTeX I can paste straight into my chapter files.
+\end{codetitled}
+
+\begin{notebox}
+Project knowledge is a snapshot. After you change files on GitHub, click
+\ui{Sync} on the GitHub item so Claude sees the latest version.
+\end{notebox}
+
+\subsection{Any AI chat assistant}
+
+Claude, ChatGPT, Gemini, Copilot, and similar assistants can all help. Start
+each conversation by saying you use the IUC \emph{iucthesis} LaTeX template, then
+use requests like these.
+
+\begin{promptbox}[Convert text from Word]
+``Convert this paragraph to LaTeX for the iucthesis template. Escape special
+characters such as \% and \&, and keep my citations as \textbackslash parencite\{key\}: [paste text]''
+\end{promptbox}
+\begin{promptbox}[Make a table]
+``Turn this data into a LaTeX table for the iucthesis template, with booktabs
+lines, the caption \emph{Regression Results}, and a \textbackslash tablenote: [paste data]''
+\end{promptbox}
+\begin{promptbox}[Create reference entries]
+``Create BibTeX entries for these references. Use the DOI where available:
+[paste references]''
+\end{promptbox}
+\begin{promptbox}[Fix an error]
+``My iucthesis LaTeX build stopped with this error. What does it mean and how do
+I fix it? [paste the error and the lines around it]''
+\end{promptbox}
+
+\clearpage
+\subsection{Using AI responsibly}
+
+\begin{warnbox}[You are responsible for your thesis]
+\begin{itemize}
+  \item \textbf{Check every reference.} AI tools sometimes invent sources that do
+        not exist. Confirm each one in the original publication or database.
+  \item \textbf{Follow your programme's rules on AI use}, including any requirement
+        to declare it. Ask your supervisor if you are unsure.
+  \item \textbf{Protect confidential data.} Do not paste participant data,
+        unpublished results, or personal information into AI tools unless your
+        ethics approval allows it.
+  \item \textbf{Read what the AI writes.} It can be wrong, and it does not know
+        your research as well as you do.
+\end{itemize}
+\end{warnbox}
+
+% ===========================================================================
+\section{Fill in your thesis}\label{sec:fill}
+% ===========================================================================
+
+\subsection{Your details: metadata.tex}
+
+Open \file{metadata.tex}. Replace the sample values \emph{inside the braces}
+\texttt{\{~\}} only. Everything else stays as it is.
+
+\begin{code}
+\title{Strategic Leadership and Organisational\\ Performance in Higher Education}
+\author{Nur Aina Binti Rahman}            % full registered name
+\matricno{IUC/PhD/2026/001}
+\address{Kuala Lumpur, Malaysia}
+\degree{Doctor of Philosophy in Management} % full name: title page
+\degreeabbr{PhD}                           % abbreviation: spine
+\institution{Innovative University College}
+\submissiondate{October 2026}             % month and year
+\submissionyear{2026}                     % year on the spine
+\declarationdate{23 October 2026}
+\end{code}
+
+\begin{tipbox}[Long titles]
+Use \texttt{\textbackslash\textbackslash} to choose where a long title breaks
+into lines, so the lines are balanced on the cover and title page.
+\end{tipbox}
+
+\subsection{Thesis, dissertation, or research project}
+
+The first line of \file{main.tex} sets the wording on the title page and in
+the declaration. Change \texttt{thesis} to \texttt{dissertation} or
+\texttt{project} if needed:
+\begin{code}
+\documentclass[thesis]{iucthesis}
+\end{code}
+
+\subsection{Front matter}
+
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{@{}>{\ttfamily\leavevmode\color{iucteal}}p{58mm}X@{}}
+\headrow \thc{File} & \thc{Contents} \\
+frontmatter/acknowledgement.tex & Thanks to supervisors, funders, family \\
+\rowcolor{iuclav}
+frontmatter/abstrak.tex         & Malay abstract (comes first), optional \cmd{keywords} \\
+frontmatter/abstract.tex        & English abstract, optional \cmd{keywords} \\
+\rowcolor{iuclav}
+frontmatter/dedication.tex      & Optional; switch on in \file{main.tex} \\
+frontmatter/abbreviations.tex   & Optional list of abbreviations \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+The cover, title page, declaration, contents page, and lists are created
+automatically from your details and chapters. A list with no entries (for
+example, no equations) is left out by itself.
+
+\subsection{Chapters}
+
+The template starts with five chapters: Introduction, Literature Review,
+Methodology, Data Analysis, and Discussion and Conclusion. Replace the sample
+text in each \file{chapters/chapterN.tex} file with your own.
+
+To add or remove a chapter, add or delete its line in \file{main.tex}, and
+create or delete the matching file:
+\begin{code}
+\include{chapters/chapter6}
+\end{code}
+
+To switch on an optional page, remove the \texttt{\%} at the start of its line in
+\file{main.tex}:
+\begin{code}
+% \input{frontmatter/dedication}     % optional: remove the first % to include
+\end{code}
+
+% ===========================================================================
+\section{Writing reference}\label{sec:writing}
+% ===========================================================================
+
+\subsection{Six golden rules}
+
+\begin{tcbraster}[raster columns=2,raster equal height,raster column skip=8pt,
+  raster row skip=6pt]
+\begin{tcolorbox}[colback=iuclav,colframe=iuclav,arc=4pt,fontupper=\small]
+  \stepnum{1}\enspace\textbf{Edit text inside \{ \}} in \file{metadata.tex}; leave the
+  commands alone.
+\end{tcolorbox}
+\begin{tcolorbox}[colback=iuclav,colframe=iuclav,arc=4pt,fontupper=\small]
+  \stepnum{2}\enspace\textbf{Lines starting with \textbackslash{} are commands.}
+  Copy them to make another.
+\end{tcolorbox}
+\begin{tcolorbox}[colback=iuclav,colframe=iuclav,arc=4pt,fontupper=\small]
+  \stepnum{3}\enspace\textbf{A blank line starts a new paragraph.} One Enter does not.
+\end{tcolorbox}
+\begin{tcolorbox}[colback=iuclav,colframe=iuclav,arc=4pt,fontupper=\small]
+  \stepnum{4}\enspace\textbf{Special characters need a backslash:}
+  \texttt{\textbackslash\%\ \textbackslash\$\ \textbackslash\&\ \textbackslash\#\ \textbackslash\_}
+\end{tcolorbox}
+\begin{tcolorbox}[colback=iuclav,colframe=iuclav,arc=4pt,fontupper=\small]
+  \stepnum{5}\enspace\textbf{Change one thing, then rebuild.} You will know
+  what caused any error.
+\end{tcolorbox}
+\begin{tcolorbox}[colback=iuclav,colframe=iuclav,arc=4pt,fontupper=\small]
+  \stepnum{6}\enspace\textbf{Do not format by hand.} No blank lines for spacing,
+  no manual numbers.
+\end{tcolorbox}
+\end{tcbraster}
+
+\subsection{Headings}
+\begin{code}
+\chapter{Literature Review}
+\section{Leadership Theories}
+\subsection{Transformational Leadership}
+\end{code}
+Use title case; chapter titles become uppercase automatically. Only these three
+levels are allowed (Style Manual~10.2): a fourth level stops the build with an error.
+
+\subsection{Citations (APA 7)}
+
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{@{}p{38mm}>{\ttfamily}p{58mm}X@{}}
+\headrow \thc{You want} & \thc{\normalfont Type this} & \thc{You get} \\
+Author in the sentence & \textbackslash textcite\{smith2023\}            & Smith (2023) \\
+\rowcolor{iuclav}
+Author in brackets     & \textbackslash parencite\{smith2023\}           & (Smith, 2023) \\
+Two sources            & \textbackslash parencite\{smith2023,lee2021\}   & (Lee, 2021; Smith, 2023) \\
+\rowcolor{iuclav}
+With a page number     & \textbackslash parencite[p.\textasciitilde 18]\{smith2023\} & (Smith, 2023, p.~18) \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\texttt{smith2023} is the \emph{key} of the source in \file{references.bib}.
+
+\subsection{Adding references}
+
+Google Scholar (\ui{Cite} \textrightarrow{} \ui{BibTeX}), Zotero, Mendeley, and
+EndNote all export BibTeX. Paste each entry into \file{references.bib}:
+
+\begin{bib}
+@article{smith2023,
+  author  = {Smith, Jane and Lee, Ahmad},
+  title   = {Leadership in higher education},
+  journal = {Journal of Education},
+  volume  = {12},
+  number  = {3},
+  pages   = {45--60},
+  year    = {2023},
+  doi     = {10.1234/abcd}
+}
+\end{bib}
+
+Only sources you cite appear in the REFERENCES list. It is sorted and
+formatted in APA 7 automatically.
+
+\begin{warnbox}[Check exported entries]
+Reference managers make mistakes: missing DOIs, wrong capitalisation, or
+``et al.'' typed as an author. Check each entry against the source.
+\end{warnbox}
+
+\subsection{Tables}
+The caption goes \textbf{above} the table.
+\begin{code}
+\begin{table}[htbp]
+  \caption{Respondent Demographics}
+  \label{tab:demographics}
+  \begin{tabular}{lcc}
+    \toprule
+    Group  & Number & Percentage \\
+    \midrule
+    Male   & 120    & 48\% \\
+    Female & 130    & 52\% \\
+    \bottomrule
+  \end{tabular}
+  \tablenote{Percentages are rounded.}
+\end{table}
+\end{code}
+In your text, write \texttt{Table\textasciitilde\textbackslash ref\{tab:demographics\}};
+the number is filled in for you. For a wide table, wrap it in
+\texttt{\textbackslash begin\{landscape\}} \ldots{} \texttt{\textbackslash end\{landscape\}}.
+
+\subsection{Figures}
+Put the image in \file{figures/}. The caption goes \textbf{below} the figure.
+\begin{code}
+\begin{figure}[htbp]
+  \includegraphics[width=0.8\textwidth]{figures/framework}
+  \caption{Research Framework}
+  \label{fig:framework}
+  \figuresource{Adapted from Smith (2023).}
+\end{figure}
+\end{code}
+
+\begin{tipbox}[Image quality]
+Use PNG or PDF for charts and diagrams, JPG for photographs. Export charts
+from Excel or SPSS at 300 dpi or as PDF so they stay sharp when printed.
+\end{tipbox}
+
+\subsection{Equations}
+\begin{code}
+\begin{equation}
+  y = \beta_0 + \beta_1 x + \varepsilon
+  \eqtitle{Linear Regression Model}
+  \label{eq:regression}
+\end{equation}
+\end{code}
+\cmd{eqtitle} adds the equation to the List of Equations. To refer to it in
+your text, write \texttt{Equation\textasciitilde(\textbackslash ref\{eq:regression\})}.
+
+\subsection{Quotations, lists, and appendices}
+\begin{code}
+\begin{quote}            % quotations of 40 words or more
+Quoted text ... \parencite[p.~18]{smith2023}
+\end{quote}
+
+\begin{itemize}          % bullet list; use enumerate for 1, 2, 3
+  \item First point
+  \item Second point
+\end{itemize}
+\end{code}
+In \file{appendices/}, each \cmd{chapter} becomes APPENDIX~A, B, and so on, and
+is added to the contents page and the List of Appendices.
+
+% ===========================================================================
+\section{Build and check your PDF}\label{sec:build}
+% ===========================================================================
+
+\subsection{What you get}
+
+\begin{center}
+\begin{tikzpicture}
+  \foreach \p/\lab [count=\i] in {1/Title page,2/Contents,3/Chapter opening,4/Tables and figures,5/References}{
+    \node[inner sep=0pt,draw=iucgrey!35,line width=0.3pt,fill=white,drop shadow={opacity=0.25,shadow xshift=0.6mm,shadow yshift=-0.6mm}]
+      (p\i) at ({(\i-1)*33mm},0)
+      {\includegraphics[page=\p,width=30mm]{sample-pages}};
+    \node[below=2mm of p\i,font=\scriptsize\bfseries,text=iucpurple] {\lab};
+  }
+\end{tikzpicture}
+\end{center}
+
+\subsection{Run the build twice after big changes}
+
+Page numbers, the contents page, lists, and cross-references are updated on the
+\emph{next} build. After adding a chapter, table, figure, or reference, build
+again if anything shows \texttt{??} or looks out of date. Overleaf,
+\texttt{latexmk}, and GitHub do this for you automatically.
+
+\subsection{Check the margins}
+
+Add \texttt{showframe} to line 1 of \file{main.tex} to draw the text area on every
+page. Everything must stay inside it. Remove it before submission.
+\begin{code}
+\documentclass[thesis,showframe]{iucthesis}
+\end{code}
+
+\subsection{The spine}
+
+Build \file{spine.tex} to get \file{spine.pdf}: a strip with your name, degree
+abbreviation, and year, in the IUC spine format. Give it to the binder, who
+will confirm the real spine width. The binder also applies the cover colour
+(purple for master's, black for doctoral) and the gold lettering.
+
+% ===========================================================================
+\section{Troubleshooting}\label{sec:trouble}
+% ===========================================================================
+
+LaTeX stops at the first serious problem and shows a message starting with
+\texttt{!}. Find the line number it mentions, then use this table.
+
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{52mm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+\headrow \thc{Message or symptom} & \thc{Usual cause} & \thc{Fix} \\
+\texttt{This class needs XeLaTeX} & Wrong engine & Set the compiler to XeLaTeX (Sections~\ref{sec:overleaf}, \ref{sec:local}) \\
+\rowcolor{iuclav}
+\texttt{Missing \$ inserted} & \texttt{\_} or \texttt{\^{}} in normal text & Write \texttt{\textbackslash\_} or \texttt{\textbackslash\^{}\{\}} \\
+Part of a line disappears & \texttt{\%} starts a comment & Write \texttt{\textbackslash\%} \\
+\rowcolor{iuclav}
+\texttt{Missing \}} / \texttt{Runaway argument} & An opening \texttt{\{} without its \texttt{\}} & Find and close the brace \\
+\texttt{Undefined control sequence} & Misspelt command & Check the spelling after \texttt{\textbackslash} \\
+\rowcolor{iuclav}
+\texttt{Citation `x' undefined} & Key not in \file{references.bib} & Check the key; build again \\
+\texttt{??} instead of a number & Not updated yet & Build again \\
+\rowcolor{iuclav}
+\texttt{\textbackslash subsubsection is not permitted} & Fourth heading level & Use \cmd{subsection} \\
+\texttt{File `x' not found} & Wrong image name or folder & Check the name and that it is in \file{figures/} \\
+\rowcolor{iuclav}
+New item missing from a list & Lists update on the next build & Build again \\
+Font warnings in the log & Times New Roman not installed & Nothing; free equivalents are used \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{tipbox}[Still stuck?]
+Undo your last change and build again. If that works, the problem is in that
+change. Otherwise, copy the error and the lines around it into an AI assistant
+(Section~\ref{sec:ai}), or report it on the template's GitHub page under
+\ui{Issues}.
+\end{tipbox}
+
+% ===========================================================================
+\section{Before you submit}\label{sec:submit}
+% ===========================================================================
+
+Complete the \textbf{Final Manuscript Submission Checklist} in the IUC Style
+Manual (Section~18). Also check:
+
+\newcommand\cbox{\textcolor{iucpurple}{$\square$}\enspace}
+\begin{tcolorbox}[enhanced,colback=iuclav,colframe=iuclav,arc=4pt,left=10pt,
+  right=10pt,top=8pt,bottom=8pt]
+\begin{itemize}[label={},leftmargin=0pt,itemsep=5pt]
+  \item \cbox Title and name match your registration records exactly.
+  \item \cbox The document type (\texttt{thesis}, \texttt{dissertation}, \texttt{project}) is correct.
+  \item \cbox The compulsory minimum word count for your study mode is met.
+  \item \cbox The Malay and English abstracts say the same thing.
+  \item \cbox No sample text from the template remains.
+  \item \cbox Every citation is in the reference list, and every reference is cited.
+  \item \cbox Every reference has been checked against the original source.
+  \item \cbox Tables, figures, and equations are numbered and referred to in the text.
+  \item \cbox The contents page and lists match the headings and captions.
+  \item \cbox \texttt{showframe} is removed, and nothing goes outside the margins.
+  \item \cbox Every page of the final PDF has been read.
+  \item \cbox The PDF has a clear name, e.g. \texttt{StudentID\_Surname\_Thesis.pdf}.
+  \item \cbox \file{spine.pdf} and four hardbound copies are arranged with the binder.
+\end{itemize}
+\end{tcolorbox}
+
+% ===========================================================================
+\section*{Quick reference}
+\addcontentsline{toc}{section}{Quick reference}
+% ===========================================================================
+
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{@{}>{\ttfamily\raggedright\arraybackslash}p{80mm}>{\raggedright\arraybackslash}X@{}}
+\headrow \thc{\normalfont Command} & \thc{Result} \\
+\textbackslash chapter\{Title\}                 & New chapter (new page, 40 mm top) \\
+\rowcolor{iuclav}
+\textbackslash section\{Title\}                 & Section 1.1 \\
+\textbackslash subsection\{Title\}              & Subsection 1.1.1 \\
+\rowcolor{iuclav}
+\textbackslash textcite\{key\}                  & Smith (2023) \\
+\textbackslash parencite\{key\}                 & (Smith, 2023) \\
+\rowcolor{iuclav}
+\textbackslash parencite[p.\textasciitilde 5]\{key\} & (Smith, 2023, p.~5) \\
+\textbackslash label\{tab:x\}, \textbackslash ref\{tab:x\} & Label something; refer to its number \\
+\rowcolor{iuclav}
+\textbackslash tablenote\{\ldots\}              & \emph{Note.} line under a table \\
+\textbackslash figuresource\{\ldots\}           & \emph{Source:} line under a figure \\
+\rowcolor{iuclav}
+\textbackslash eqtitle\{\ldots\}                & Equation title for the List of Equations \\
+\textbackslash keywords\{\ldots\}               & Keywords under an abstract \\
+\rowcolor{iuclav}
+\textbackslash textbf\{\ldots\}, \textbackslash emph\{\ldots\} & \textbf{Bold}, \emph{italic} \\
+\textbackslash\%\ \ \textbackslash\&\ \ \textbackslash\$\ \ \textbackslash\#\ \ \textbackslash\_ & \%\ \ \&\ \ \$\ \ \#\ \ \_ \\
+\rowcolor{iuclav}
+\textasciitilde                                 & Non-breaking space, e.g. \texttt{Table\textasciitilde 4.1} \\
+-{}-                                            & En dash for ranges, e.g. 45--60 \\
+\rowcolor{iuclav}
+\textbackslash begin\{quote\} \ldots            & Block quotation (40+ words) \\
+\textbackslash begin\{itemize\} \textbackslash item \ldots & Bullet list \\
+\rowcolor{iuclav}
+\textbackslash begin\{landscape\} \ldots        & Landscape page for a wide table \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\vfill
+\begin{tcolorbox}[enhanced,colback=iucpurple,colframe=iucpurple,arc=5pt,
+  left=12pt,right=12pt,top=10pt,bottom=10pt,fontupper=\color{white}\small]
+\begin{tabularx}{\linewidth}{@{}X r@{}}
+\textbf{Template and updates}\newline \href{\repourl}{\texttt{github.com/fahimroslan/iucstyle\_latex}}\newline
+Report problems under \textbf{Issues} on that page.\par\smallskip
+\textbf{Formatting rules}\newline IUC Thesis \& Dissertation Style Manual, Edition 3.0
+& \raisebox{-0.5\height}{\includegraphics[width=48mm]{iuc-logo-white}}
+\end{tabularx}
+\end{tcolorbox}
+{\footnotesize\color{iucgrey}The template class (\texttt{iucthesis.cls}) is
+distributed under the LaTeX Project Public License 1.3c. The IUC Style Manual
+remains the authority on formatting; if this manual and the Style Manual
+differ, follow the Style Manual.\par}
+
+\end{document}

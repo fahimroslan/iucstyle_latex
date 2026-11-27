@@ -1,0 +1,16 @@
+{
+  // LaTeX Workshop: build with XeLaTeX + biber (required by iucthesis.cls).
+  // The extension's default recipe uses pdfLaTeX, which this template does not support.
+  "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk-xelatex",
+      "command": "latexmk",
+      "args": ["-xelatex", "-synctex=1", "-interaction=nonstopmode", "-file-line-error", "%DOC%"]
+    }
+  ],
+  "latex-workshop.latex.recipes": [
+    { "name": "IUC thesis (XeLaTeX + biber)", "tools": ["latexmk-xelatex"] }
+  ],
+  "latex-workshop.latex.rootFile.doNotPrompt": true,
+  "latex-workshop.latex.rootFile.useSubFile": false
+}
